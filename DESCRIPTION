@@ -1,0 +1,20 @@
+Package: antgreens
+Type: Package
+Title: Automatic Generation of Vegetable Report
+Version: 0.1.0
+Authors@R:
+  person("Yuanchen", "Zhu", email = "yuanchenzhu@126.com", role = c("aut", "cre"))
+Author: Yuanchen Zhu [aut, cre]
+Maintainer: Yuanchen Zhu <yuanchenzhu@126.com>
+Description: Automatically generate pesticide residue report of vegetables based on bookdown.
+    It provides some functions to help the output of static, dynamic or interactive chart.
+    Most improtantly, it provides a function that can quickly complete data processing and 
+    template based report generation according to the provided cleaned data file. All you 
+    need to do is prepare the required cleaned data file. Note that this pacakge is for
+    special use and all process depand on a fixed data format.
+URL: git@formlesslab.top:/home/git/pepos/antgreens.git
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: Rcpp (>= 1.0.7)
+LinkingTo: Rcpp
