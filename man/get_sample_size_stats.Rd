@@ -22,6 +22,6 @@ size.
 Get Sample Size Statistics for Given Dimension Combnation
 }
 \examples{
-data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-get_sample_size_stats(data, draw+figure = FALSE, a, b)
+# data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+# get_sample_size_stats(data, draw_figure = FALSE, a, b)
 }

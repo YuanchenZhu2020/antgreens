@@ -10,7 +10,7 @@ normalize_path(path, winslash = .Platform$file.sep, must_work = FALSE)
 \item{path}{character or character vector of file paths.}
 
 \item{winslash}{the separator to be used on Windows. Default is
-\code{\link{.Platform$file.sep}}. Must be one of \code{c('/', '\\')}.}
+\code{\link{.Platform}$file.sep}. Must be one of \code{c('/', '\\\\')}.}
 
 \item{must_work}{logical, default FALSE.}
 }
@@ -20,5 +20,5 @@ default parameters.
 }
 \examples{
 library(antgreens)
-normalize_path(c('~', NA, "file/path"))
+normalize_path(c('', NA, "file/path"))
 }

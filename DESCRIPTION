@@ -16,6 +16,15 @@ URL: git@formlesslab.top:/home/git/pepos/antgreens.git
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 1.0.7)
+Imports: 
+    data.table,
+    dplyr,
+    magrittr,
+    openxlsx,
+    Rcpp,
+    readr,
+    readxl,
+    rlang,
+    tidyr
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1

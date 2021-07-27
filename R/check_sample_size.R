@@ -9,8 +9,9 @@
 #' sample size (\code{min_ss}).
 #' @export
 #'
-#' @examples data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-#' check_sample_size(data, dimensions = c('a', 'b', 'c'))
+#' @examples
+#' # data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+#' # check_sample_size(data, dimensions = c('a', 'b', 'c'))
 check_sample_size <- function(data, dimensions, path) {
   col_names <- c(dimensions, "min_ss", "med_ss", "max_ss")
   rows <- 2^length(dimensions)
@@ -19,18 +20,18 @@ check_sample_size <- function(data, dimensions, path) {
 
   rowid <- 1
   for (i in 0:length(dimensions)) {
-    dims_comb <- combn(dimensions, i)
+    dims_comb <- utils::combn(dimensions, i)
     for (j in 1:ncol(dims_comb)) {
       dims <- dims_comb[,j]
       for (c in dims) sample_size_stats[,c][rowid] <- 1
 
-      dims <- setdiff(dims, DrugName)
+      dims <- setdiff(dims, get_option("DrugName"))
       tmp <- get_sample_size_stats(
         data, draw_figure = FALSE,
         !!!rlang::parse_exprs(dims)
       )
       sample_size_stats[,"min_ss"][rowid] <- tmp$min_ss
-      sample_size_stats[,"med_ss"][rowid] <- tmp$mid_ss
+      sample_size_stats[,"med_ss"][rowid] <- tmp$med_ss
       sample_size_stats[,"max_ss"][rowid] <- tmp$max_ss
       rowid <- rowid + 1
     }
@@ -45,14 +46,6 @@ check_sample_size <- function(data, dimensions, path) {
   return(sample_size_stats)
 }
 
-#' Names of "Drug"
-#'
-#' @description \code{DrugName} is a character vector with some names of "drug"
-#' using in vegetables.
-#'
-#' @export
-DrugName <- c("药物", "drug", "农药", "pesticide")
-
 #' Get Sample Size Statistics for Given Dimension Combnation
 #'
 #' @param dataset data frame of raw data or renamed data.
@@ -64,18 +57,20 @@ DrugName <- c("药物", "drug", "农药", "pesticide")
 #' size.
 #' @export
 #'
-#' @examples data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-#' get_sample_size_stats(data, draw+figure = FALSE, a, b)
+#' @examples
+#' # data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+#' # get_sample_size_stats(data, draw_figure = FALSE, a, b)
+#' @importFrom magrittr %>%
 get_sample_size_stats <- function(dataset, draw_figure = TRUE, ...) {
   sample_size_df <- dataset %>%
-    group_by(...) %>%
-    summarise(sample_size = n())
+    dplyr::group_by(...) %>%
+    dplyr::summarise(sample_size = dplyr::n())
   max_ss <- max(sample_size_df[["sample_size"]])
   min_ss <- min(sample_size_df[["sample_size"]])
-  med_ss <- median(sample_size_df[["sample_size"]])
+  med_ss <- stats::median(sample_size_df[["sample_size"]])
   if (draw_figure) {
-    hist(sample_size_df[["sample_size"]])
-    rug(jitter(sample_size_df[["sample_size"]]))
+    graphics::hist(sample_size_df[["sample_size"]])
+    graphics::rug(jitter(sample_size_df[["sample_size"]]))
   }
   return(list(
     "df" = sample_size_df,

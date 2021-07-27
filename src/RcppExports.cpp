@@ -10,19 +10,35 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _antgreens_rcpp_hello() {
+// mapping_mrl
+std::map<String, NumericVector> mapping_mrl(NumericMatrix mrl, CharacterVector products);
+RcppExport SEXP _antgreens_mapping_mrl(SEXP mrlSEXP, SEXP productsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
+    Rcpp::traits::input_parameter< NumericMatrix >::type mrl(mrlSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type products(productsSEXP);
+    rcpp_result_gen = Rcpp::wrap(mapping_mrl(mrl, products));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calc_residue_index
+NumericMatrix calc_residue_index(NumericMatrix vm, CharacterVector products, List mrl_map);
+RcppExport SEXP _antgreens_calc_residue_index(SEXP vmSEXP, SEXP productsSEXP, SEXP mrl_mapSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type vm(vmSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type products(productsSEXP);
+    Rcpp::traits::input_parameter< List >::type mrl_map(mrl_mapSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_residue_index(vm, products, mrl_map));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_antgreens_rcpp_hello", (DL_FUNC) &_antgreens_rcpp_hello, 0},
+    {"_antgreens_mapping_mrl", (DL_FUNC) &_antgreens_mapping_mrl, 2},
+    {"_antgreens_calc_residue_index", (DL_FUNC) &_antgreens_calc_residue_index, 3},
     {NULL, NULL, 0}
 };
 

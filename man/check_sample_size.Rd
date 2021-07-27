@@ -22,6 +22,6 @@ sample size (\code{min_ss}).
 Check Sample Size of combinations of dimensions
 }
 \examples{
-data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-check_sample_size(data, dimensions = c('a', 'b', 'c'))
+# data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+# check_sample_size(data, dimensions = c('a', 'b', 'c'))
 }
