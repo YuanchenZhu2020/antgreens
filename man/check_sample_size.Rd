@@ -4,12 +4,15 @@
 \alias{check_sample_size}
 \title{Check Sample Size of combinations of dimensions}
 \usage{
-check_sample_size(data, dimensions, path)
+check_sample_size(data, dimensions, drug_names = DrugNames, path)
 }
 \arguments{
 \item{data}{data frame of raw data or renamed data.}
 
 \item{dimensions}{character vector of dimensions to be analysis in \code{data}.}
+
+\item{drug_names}{dimension name for \code{drug}. The default value
+is in \code{\link{DrugNames}}.}
 
 \item{path}{character of \code{.xls(x)} file path.}
 }
@@ -22,6 +25,6 @@ sample size (\code{min_ss}).
 Check Sample Size of combinations of dimensions
 }
 \examples{
-# data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-# check_sample_size(data, dimensions = c('a', 'b', 'c'))
+data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+check_sample_size(data, dimensions = c('a', 'b', 'c'))
 }

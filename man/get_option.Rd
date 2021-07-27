@@ -12,7 +12,3 @@ get_option(var_name)
 \description{
 Get \code{antgreens_options} in \code{.GlobalEnv}
 }
-\examples{
-# library(antgreens)
-# get_option("ProductLabelName")
-}

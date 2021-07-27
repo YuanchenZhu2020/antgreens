@@ -12,6 +12,3 @@ None
 \description{
 Load Initial Options for antgreens
 }
-\examples{
-# load_antgreens_options()
-}

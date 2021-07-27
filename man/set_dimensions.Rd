@@ -4,12 +4,20 @@
 \alias{set_dimensions}
 \title{Set Dimensions to be Analysis After Import antgreens}
 \usage{
-set_dimensions(product_label_name = NA, other_labels = NA)
+set_dimensions(
+  product_label_name = NA,
+  drug_label_name = NA,
+  other_labels = NA
+)
 }
 \arguments{
 \item{product_label_name}{character, default NA. It is the column name both in
 raw data and MRL data. If set NA this parameter will use the default value (See
 use \code{get_option("ProductLabelName")})}
+
+\item{drug_label_name}{character vector, default NA. It is the name of pesticides column
+which exists in long table. If set NA this parameter will use the default value (See
+use \code{get_option("DrugNames")})}
 
 \item{other_labels}{It mey be a list or a character which is one item of antgreens options.}
 }
@@ -18,8 +26,4 @@ None
 }
 \description{
 Set Dimensions to be Analysis After Import antgreens
-}
-\examples{
-# library(antgreens)
-# set_dimensions()
 }

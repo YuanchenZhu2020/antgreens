@@ -1,0 +1,22 @@
+bookdown::gitbook:
+  dev: svglite
+  css: [css/style.css, css/dt_css_custom.css]
+  split_by: section+number
+  config:
+    toc:
+      before: |
+        <li><a href="./">农产品质量安全中长期风险调查分析报告（2016-2020）（蔬菜）</a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">由 bookdown 强力驱动</a></li>
+    download: ["pdf"]
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+  keep_tex: yes
+  dev: "cairo_pdf"
+  latex_engine: xelatex
+  citation_package: natbib
+  # 各文件以“章”进行区分，影响章节编号
+  pandoc_args: --top-level-division=chapter
+  toc_depth: 3
+  toc_unnumbered: no

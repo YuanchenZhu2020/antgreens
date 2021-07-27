@@ -15,8 +15,6 @@
 #' a character representing the **absolute** path of the CSV file.
 #' @export
 #' @importFrom magrittr %>%
-#' @importFrom readxl read_excel
-#' @importFrom readr write_excel_csv
 excel_to_utf8bom_csv <- function(raw_path, csv_path = NA) {
   if (is.na(csv_path)) {
     file_name <- paste0(
@@ -27,8 +25,8 @@ excel_to_utf8bom_csv <- function(raw_path, csv_path = NA) {
   }
 
   # read data in the form of `.xls(x)` and write in `.csv` with UTF-8 Byte order mark
-  data <- read_excel(raw_path) %>%
-    write_excel_csv(csv_path)
+  data <- readxl::read_excel(raw_path) %>%
+    readr::write_excel_csv(csv_path)
   csv_path <- normalize_path(csv_path)
 
   return(csv_path)

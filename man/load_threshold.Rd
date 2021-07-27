@@ -4,10 +4,23 @@
 \alias{load_threshold}
 \title{Load Threshold Data in Excel Format}
 \usage{
-load_threshold(path)
+load_threshold(
+  path,
+  dims_en2cn = modifyList(RawColnameTrans, list(product = ProductLabelName, drug =
+    DrugNames[1])),
+  threshold_key = ThresholdName
+)
 }
 \arguments{
 \item{path}{character of .xls(x) file which has threshold data.}
+
+\item{dims_en2cn}{list where the keys are English name of dimensions and the values
+are column names of raw data (which is usually Chinese). The default value is the
+list of \code{\link{RawColnameTrans}}, \code{\link{ProductLabelName}}
+and the first item of \code{\link{DrugNames}}.}
+
+\item{threshold_key}{character. The keyword of threshold column name. The default
+value is \code{\link{ThresholdName}}.}
 }
 \value{
 a data frame contains dimensions combination encoded with 0/1 and threshold

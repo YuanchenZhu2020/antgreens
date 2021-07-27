@@ -20,9 +20,12 @@ get_year_range <- function(csv_data_file, year_colname = "\u5e74\u4efd") {
 #'
 #' @return None (invisible `NULL`)
 #'
+#' @export
+#'
 #' @examples
-#' pkgs <- c('data.table', 'tidyverse', 'Rcpp')
-#' check_isntall_pkgs(pkgs)
+#' # library(antgreens)
+#' # pkgs <- c('data.table', 'tidyverse', 'Rcpp')
+#' # check_install_pkgs(pkgs)
 check_install_pkgs <- function(pkgs_vec = c("data.table", "tidyverse", "bookdown")) {
   void <- lapply(
     pkgs_vec,
@@ -35,15 +38,17 @@ check_install_pkgs <- function(pkgs_vec = c("data.table", "tidyverse", "bookdown
 
 #' Generate Environment for Book Rendering
 #'
-#' @param data_path
-#' @param skip_conv
-#' @param year_colname
-#' @param year_range
+#' @param data_path character. Path of csv or excel raw data file
+#' @param skip_conv logical, default FALSE. If set TRUE then the \code{data_path}
+#' refers to the path of CSV raw data file, otherwise refers to the path of .xls(x)
+#' raw data file.
+#' @param year_range numeric vector length 2, default NA.
+#' @param year_colname character of column name for dimension \code{year}.
 #'
-#' @return
+#' @return environment object contains necessary objects.
 #' @export
 book_env <- function(
-  data_path, skip_conv = FALSE, year_colname = "\u5e74\u4efd", year_range = NA
+  data_path, skip_conv = FALSE, year_range = NA, year_colname = "\u5e74\u4efd"
 ) {
   # if choose to skip the convert of data file, then `data_path` represent the path
   # of the `.csv` file. Otherwise do converting.
@@ -52,6 +57,8 @@ book_env <- function(
   } else {
     csv_path <- excel_to_utf8bom_csv(data_path)
   }
+
+  # get year range of report
   if (all(is.na(year_range))) {
     year_range <- get_year_range(csv_path, year_colname = year_colname)
     message("The year range of this report is: ", year_range[1], " to ", year_range[2])
@@ -63,12 +70,13 @@ book_env <- function(
 
 #' Automatically Render Report
 #'
-#' @param input_dir
-#' @param raw_data_path
-#' @param skip_conv
-#' @param ...
+#' @param input_dir character, default '.'. Root directory for a bookdown project
+#' (contains \code{index.Rmd} file).
+#' @param skip_conv void
+#' @param ... void
+#' @param data_path void
 #'
-#' @return
+#' @return path of HTML book.
 #' @export
 auto_report <- function(input_dir = ".", data_path, skip_conv = FALSE, ...) {
   check_install_pkgs()

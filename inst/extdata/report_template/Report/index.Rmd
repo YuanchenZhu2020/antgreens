@@ -1,0 +1,222 @@
+--- 
+title: "农产品质量安全中长期风险调查分析报告（`r year_range[1]`-`r year_range[2]`）"
+subtitle: "蔬菜中农药残留风险监测与安全性评价"
+author:
+  - 中国农业科学院农业质量标准与检测技术研究所
+  - 北京航空航天大学经济管理学院
+  - 北京航空航天大学复杂数据分析研究中心
+date: "`r format(Sys.time(), '%Y年%m月%d日')`"
+description: ""
+site: bookdown::bookdown_site
+documentclass: ctexbook
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+# fontsize: 12pt
+link-citations: yes
+params:
+  # CRAN Mirror
+  cran_mirror: 
+    label: "CRAN Mirror"
+    value: "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
+  # dataset
+  raw_data:
+    label: "Raw Dataset"
+    value: "../Data/raw_data/vegetable_58_2016-2020.UTF-8.csv"
+    input: file
+  mrl_data:
+    label: "MRL Standard Dataset"
+    value: "../Data/raw_data/MRL_2020.xlsx"
+    input: file
+  products:
+    label: "Products Info Dataset"
+    value: "../Data/raw_data/products.xlsx"
+    input: file
+  pesticides:
+    label: "Pesticides Info Dataset"
+    value: "../Data/raw_data/pesticides.xlsx"
+    input: file
+  province:
+    label: "Province Chinese and English Name"
+    value: "../Data/raw_data/province.xlsx"
+    input: file
+  ana_threshold:
+    label: "Threshold of Each Dimensions' Combination"
+    value: "../Data/multi_dim_check.xlsx"
+    input: file
+  # code path
+  codes_dir: "../Codes"
+  
+  # all dims to be analysis
+  ana_dims_part: !r list(year = "年份", quarter = "季度", province = "省份", category = "产品类别")
+  ana_dims_product: "产品名称"
+  ana_dims_drug: "药物"
+  
+  # threshold keyword
+  threshold_kw: "阈值"
+  
+  # drug column
+  st_drug: "甲胺磷"
+  ed_drug: "二甲戊灵"
+  
+  # Cache setting
+  product_env: FALSE
+  
+  # digits of float number
+  digits: 2
+  
+  # en to zh-CN list
+  colname_map: !r list(category = "蔬菜类别", drug = "农药")
+---
+
+```{r setup, include=FALSE}
+##### chunks settings for codes and figures #####
+knitr::opts_chunk$set(
+	echo = FALSE,
+	fig.height = 6,
+	fig.pos = "H",
+	fig.width = 8,
+	message = FALSE,
+	warning = FALSE,
+	out.extra = "",
+	tidy = TRUE,
+	dpi = 300
+)
+# replace NA with '' in table
+options(knitr.kable.NA = '')
+# prohibit changing of the default format of the table when kableExtra is imported,
+# so as to solve the problem of changing all the table styles after importing.
+options(kableExtra.auto_format = FALSE)
+
+##### set CRAN mirror #####
+local({
+  r = getOption('repos')
+  if (!length(r) || identical(unname(r['CRAN']), '@CRAN@'))
+    r['CRAN'] = params$cran_mirror 
+  options(repos = r)
+})
+
+##### install from CRAN mirrors #####
+lapply(
+  c('antgreens', 'knitr', 'tidyverse', 'RColorBrewer', 'data.table', 'readxl', 'Rcpp', 'rlang', 'webshot', 'DT', 'echarts4r'), 
+  function(pkg) {
+    if (system.file(package = pkg) == '') install.packages(pkg)
+  }
+)
+
+##### install from github #####
+githubs <- c('citr' = 'crsh/citr')
+lapply(names(githubs), function(pkg) {
+  if (system.file(package = pkg) == '') remotes::install_github(githubs[pkg], upgrade = FALSE)
+})
+```
+
+```{r import_dependence, include=FALSE}
+library(antgreens)
+library(tidyverse)
+library(RColorBrewer)
+library(echarts4r)
+library(readxl)
+library(DT)
+
+webshot::install_phantomjs()
+```
+
+```{r report_setup, include=FALSE}
+##### DT and dable settings #####
+# `dable` is the customized function of DT::databale
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2,
+  # width = 55, digits = 4, 
+  # warnPartialMatchAttr = FALSE, warnPartialMatchDollar = FALSE,
+  DT.options = DTOptions,
+  report.options = list(
+    colnameMap = modifyList(ColnamesI18n$chinese, params$colname_map)
+  )
+)
+```
+
+```{r load_raw_data, include=FALSE, cache=!params$product_env}
+raw_data <- as.data.frame(data.table::fread(params$raw_data, encoding = "UTF-8"))
+mrl_data <- readxl::read_excel(params$mrl_data)
+provinces <- readxl::read_excel(params$province)
+products <- readxl::read_excel(params$products)
+pesticides <- readxl::read_excel(params$pesticides)
+# ...
+```
+
+```{r load_threshold_data, include=FALSE, cache=!params$product_env}
+ana_dims_en2cn <- modifyList(
+  params$ana_dims_part, 
+  list(product = params$ana_dims_product, drug = params$ana_dims_drug)
+)
+ana_threshold <- load_threshold(
+  params$ana_threshold, dims_en2cn = ana_dims_en2cn, threshold_key = params$threshold_kw
+)
+```
+
+```{r process_raw_data, include=FALSE, cache=!params$product_env}
+treated_data <- calc_treated_data(
+  raw_data, mrl_data, params$st_drug, params$ed_drug,
+  raw_col_en2cn = params$ana_dims_part, product_name = params$ana_dims_product
+)
+```
+
+```{r generate_dims_combination_data, include=FALSE, cache=!params$product_env}
+dims <- c(names(params$ana_dims_part), "product", "drug")
+dims_comb_data <- gen_dims_comb_stats(data, dims, fast = TRUE)
+```
+
+```{r load_other_codes, include=FALSE}
+code_files <- dir(params$codes_dir, pattern = "*.R")
+for (cf in code_files) {
+  source(cf, encoding = "UTF-8")
+}
+```
+
+#  前言 {-}
+
+> 使用流程
+
+## 创建项目
+
+&emsp;&emsp;载入 **antgreens**，使用 `use_template(dir, folder)` 复制报告模板到指定目录并将工作目录移至该目录下。
+
+## 确定维度及名称
+
+&emsp;&emsp;确定分析的所有维度，并为其中文名称指定英文变量名，放入列表中，例如：
+
+```markdown
+dims_en2cn <- list(year = "年份", ...)
+```
+
+**antgreens** 默认使用 `r paste0(sapply(names(RawColnameTrans), \(x) {paste0(x, " = ", RawColnameTrans[[x]])}), collapse = '、')` 作为分析的维度以及其名称，其中中文名为原始数据中的列名，英文名为运行时使用的变量名。
+
+&emsp;&emsp;接着，确定原始数据与 MRL 数据中共同代表**具体产品**的列名
+
+```markdown
+product_name <- "产品名称"
+```
+
+&emsp;&emsp;最后，选取一个中文名称代表检测的所有农药这一维度，默认为“药物”
+
+```markdown
+drug_name <- "药物"
+```
+
+## 生成各维度组合的样本量
+
+&emsp;&emsp;载入原始数据 `data`，确定需要分析的所有维度名（即列名），使用 `check_sample_size(data, dimensions, path)` 获取各维度组合下的样本量（最大、最小、中位数），并保存在文件中；然后手动根据实际情况确定各维度组合的样本量阈值，确定阈值时可以使用
+
+```markdown
+get_sample_size_stats(data, draw_figure = TRUE, 年份, 药物)
+```
+
+来输出这一维度组合下各种组合的样本量分布图，辅助确定样本量阈值。
+
+&emsp;&emsp;将确定好的阈值写入之前输出的文件，列名建议包含“阈值”一词（例如“样本量阈值”），也可以取其他名称，但是需要记录阈值所在列的列名关键词：
+
+```markdown
+threshold_key <- "阈值"
+```
+
+## （待续）

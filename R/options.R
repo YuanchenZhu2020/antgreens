@@ -1,18 +1,11 @@
 #' Variable Name of Antgreens Options List
-#' @export
 antgreens_opt_name <- "antgreens_options"
 
 #' Load Initial Options for antgreens
 #'
 #' @return None
-#' @export
-#'
-#' @examples
-#' # load_antgreens_options()
-#' @importFrom rlang !!!
 load_antgreens_options <- function() {
-  product_drug <- list(ProductLabelName, names(DrugNames)[1])
-  names(product_drug) <- c("product", DrugNames[[1]])
+  product_drug <- list(product = ProductLabelName, drug = DrugNames[1])
   assign(
     antgreens_opt_name,
     list(
@@ -23,22 +16,22 @@ load_antgreens_options <- function() {
       ThresholdName = ThresholdName,
       DataTableI18n = DataTableI18n,
       ColnamesI18n = ColnamesI18n
-    ),
-    1
+    )
   )
+}
+
+#' Clear Current Options and Reload
+#'
+#' @return None
+reload_options <- function() {
+  load_antgreens_options()
 }
 
 #' Get \code{antgreens_options} in \code{.GlobalEnv}
 #'
 #' @param var_name character. The key of variable \code{antgreens_opt_name}.
-#'
-#' @export
-#'
-#' @examples
-#' # library(antgreens)
-#' # get_option("ProductLabelName")
 get_option <- function(var_name) {
-  if (!exists(antgreens_opt_name, 1)) {
+  if (!exists(antgreens_opt_name)) {
     warning("There is no antgreens options in Global Environment.")
     warning("Please reload optioins using `load_antgreen_options()` and reset your options.")
     stop("Stop to reload antgreens options")
@@ -52,13 +45,6 @@ get_option <- function(var_name) {
 #' @param value New value for this option.
 #'
 #' @return None
-#' @export
-#'
-#' @examples
-#' # library(antgreens)
-#' # var_name <- "ProductLabelName"
-#' # value <- ""
-#' # set_option(var_name, value)
 set_option <- function(var_name, value) {
   if (!exists(antgreens_opt_name, 1)) {
     warning("There is no antgreens options in Global Environment.")
@@ -83,3 +69,28 @@ set_option <- function(var_name, value) {
     globalenv()
   )
 }
+
+#' Options for DT Package
+#'
+#' @export
+DTOptions <- list(
+  # paginate
+  pageLength = 10,
+  lengthMenu = c(10, 15, 20, 25),
+  # hard-encoding of cell width
+  autoWidth = TRUE,
+  # internationalization
+  language = DataTableI18n$chinese,
+  # align
+  columnDefs = list(
+    list(className = 'dt-center', targets = "_all")
+  ),
+  # search settings
+  search = list(regex = TRUE, caseInsensitive = FALSE),
+  # searchHighlight = TRUE,
+  # enable this will cause disappearence of 2rd data table
+  # and the developer have not fix it.
+  # Extension: Buttons
+  dom = 'lBfrtip',
+  buttons = c('copy', 'csv', 'excel', 'print')
+)

@@ -2,21 +2,25 @@
 #'
 #' @description Note that \code{ProductLabelName} is renamed with "product"
 #' which is hard encoded.
+#' @export
 RawColnameTrans <- list(
   year = "\u5e74\u4efd", quarter = "\u5b63\u5ea6", province = "\u7701\u4efd",
   category = "\u4ea7\u54c1\u7c7b\u522b"
 )
 
 #' Label Name of Product in Raw and MRL Data
+#' @export
 ProductLabelName <- "\u4ea7\u54c1\u540d\u79f0"
 
 #' Names of "Drug"
 #'
 #' @description \code{DrugName} is a character vector with some names of "drug"
 #' using in vegetables.
-DrugNames <- list("\u836f\u7269" = "drug", "\u519c\u836f" = "pesticide")
+#' @export
+DrugNames <- c("\u836f\u7269", "\u519c\u836f")
 
 #' Name of Threshold Column
+#' @export
 ThresholdName <- "\u9608\u503c"
 
 #' I18N Settings for DataTable

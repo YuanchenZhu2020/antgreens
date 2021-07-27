@@ -1,0 +1,1097 @@
+# 蔬菜产品中农药（兽药）残留风险分析
+
+&emsp;&emsp;
+
+## 产品残留风险 {-}
+
+&emsp;&emsp;
+
+## 总体残留风险
+
+> 文字 + 表格
+
+```{r full-sample}
+full_sample <- spec_dataset(dims_comb_data, dims, ana_threshold, "product")
+```
+
+&emsp;&emsp;`r year_range[1]`-`r year_range[2]` 年共抽取样本 `r nrow(treated_data)` 例，总体合格率为 `r round(full_sample[["qualification_rate_percent"]], params$digits)`%。
+
+## 各年份残留风险
+
+> 表格（排序，单指标）
+
+> 柱状（总样本量）+折线（合格率）
+
+```{r year}
+year <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", year)
+```
+
+(ref:year) 各年份样本量与合格率
+
+```{r year-table, results="asis", dev='png'}
+order_colname <- "qualification_rate_percent"
+
+sp_dable(
+  year, ref_text = "(ref:year)",
+  order = list(list(order_colname, "desc"))
+) %>% formatRound(order_colname, params$digits)
+
+# dt_table_caption("(ref:year)")
+# datatable(
+#   year, extensions = 'Buttons',
+#   colnames = c("年份", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(year)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+```{r year-bar-line-plot, fig.cap="各年份样本量与合格率柱状图与折线图"}
+bar_line_plot(year %>% factor_year(), x_var = "year", scale_blank_div = 3.5)
+```
+
+## 各季度残留风险
+
+> 表格
+
+> 柱状（总样本量）+折线（合格率）
+
+
+```{r quarter}
+quarter <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", quarter)
+```
+
+(ref:quarter) 各季度样本量与合格率
+
+```{r quarter-table, results="asis", dev='png'}
+order_colname <- "qualification_rate_percent"
+
+sp_dable(
+  quarter, ref_text = "(ref:quarter)",
+  order = list(list(order_colname, "desc"))
+) %>% formatRound(order_colname, params$digits)
+
+# dt_table_caption("(ref:quarter)")
+# datatable(
+#   quarter, extensions = 'Buttons',
+#   colnames = c("季度", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(quarter)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+```{r quarter-bar-line-plot, fig.cap="各季度样本量与合格率柱状图与折线图"}
+four_seasons <- c("#F29BC4", "#5A7302", "#F2D16D", "#4995A6")
+p <- bar_line_plot(
+  quarter %>% make_quarter_readable() %>% factor_quarter(), 
+  x_var = "quarter", 
+  bar_fill_palette = four_seasons
+)
+p
+```
+
+## 各省份残留风险
+
+&emsp;&emsp;
+
+> 表格（按（不）合格率排序）
+
+> 地图 / 柱状图（旋转）
+
+```{r province}
+province <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", province)
+```
+
+(ref:province) 各省份样本量与合格率
+
+```{r province-table, results="asis", dev='png'}
+order_colname <- "qualification_rate_percent"
+
+sp_dable(
+  province, ref_text = "(ref:province)",
+  order = list(list(order_colname, "desc"))
+) %>% formatRound(order_colname, params$digits)
+
+# dt_table_caption("(ref:province)")
+# datatable(
+#   province, extensions = 'Buttons',
+#   colnames = c("省份", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(province)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+## 各蔬菜类别残留风险
+
+&emsp;&emsp;
+
+> 表格
+
+> 柱状 + 折线
+
+```{r category}
+category <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", category)
+```
+
+(ref:category) 各蔬菜类别样本量与合格率
+
+```{r category-table, results="asis", dev='png'}
+order_colname <- "qualification_rate_percent"
+
+sp_dable(
+  category, ref_text = "(ref:category)",
+  order = list(list(order_colname, "desc"))
+) %>% formatRound(order_colname, params$digits)
+
+# dt_table_caption("(ref:category)")
+# datatable(
+#   category, extensions = 'Buttons',
+#   colnames = c("蔬菜类别", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(category)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+```{r category-bar-line-plot, fig.cap="各蔬菜类别样本量与合格率柱状图与折线图"}
+four_seasons <- c("#F29BC4", "#5A7302", "#F2D16D", "#4995A6")
+p <- bar_line_plot(category %>% factor_category(), x_var = "category")
+p
+```
+
+## 各品种残留风险
+
+&emsp;&emsp;
+
+> 表格
+
+> 柱状 + 折线
+
+```{r product}
+product <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", product)
+```
+
+(ref:product) 各品种样本量与合格率
+
+```{r product-table, results="asis", dev='png'}
+order_colname <- "qualification_rate_percent"
+
+sp_dable(
+  product, ref_text = "(ref:product)",
+  order = list(list(order_colname, "desc"))
+) %>% formatRound(order_colname, params$digits)
+
+# dt_table_caption("(ref:product)")
+# datatable(
+#   product, extensions = 'Buttons',
+#   colnames = c("品种", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(product)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+```{r product-bar-line-plot, fig.cap="各年份样本量与合格率柱状图与折线图", eval=FALSE}
+bar_line_plot(product %>% factor_product(), x_var = "product", scale_blank_div = 30)
+```
+
+## “年份-季度”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，X/Y-年份/季度）
+
+> 折线图（分年份 / 单条折线 + 柱状）
+
+```{r year-quarter}
+year_quarter <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", year, quarter)
+```
+
+(ref:year-quarter) 各年份各季度样本量与合格率
+
+```{r year-quarter-table, results="asis", dev='png'}
+sp_dable(year_quarter, ref_text = "(ref:year-quarter)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+
+# dt_table_caption("(ref:year-quarter)")
+# datatable(
+#   year_quarter, extensions = 'Buttons',
+#   colnames = c("年份", "季度", "样本量", "合格率（%）"),
+#   rownames = FALSE,
+#   filter = list(position = 'top'),
+#   options = list(
+#     order = list(list(which(order_colname == colnames(year_quarter)) - 1, "desc"))
+#   )
+# ) %>% formatRound(order_colname, params$digits)
+```
+
+## “年份-省份”残留风险
+
+&emsp;&emsp;
+
+> 表格（五年合格率 + 折线图）
+
+> 地图 * 5
+
+```{r year-province}
+year_province <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", year, province)
+```
+
+(ref:year-province) 各年份各省份样本量与合格率
+
+```{r year-province-table, results="asis", dev='png'}
+sp_dable(year_province, ref_text = "(ref:year-province)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，X/Y-蔬菜类别/年份）
+
+> 柱状图 * 5，子图（5 * 1）
+
+```{r year-category}
+year_category <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", year, category)
+```
+
+(ref:year-category) 各年份各蔬菜类别样本量与合格率
+
+```{r year-category-table, results="asis", dev='png'}
+sp_dable(year_category, ref_text = "(ref:year-category)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，X/Y-品种/年份）
+
+> 柱状图 * 5，子图（5 * 1、1 * 5）
+
+```{r year-product}
+year_product <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", year, product)
+```
+
+(ref:year-product) 各年份各品种样本量与合格率
+
+```{r year-product-table, results="asis", dev='png'}
+sp_dable(year_product, ref_text = "(ref:year-product)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份”残留风险
+
+&emsp;&emsp;
+
+> 表格（四季度样本量、合格率 + 折线图）
+
+> 地图 * 4
+
+```{r quarter-province}
+quarter_province <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", quarter, province)
+```
+
+(ref:quarter-province) 各季度各省份样本量与合格率
+
+```{r quarter-province-table, results="asis", dev='png'}
+sp_dable(quarter_province, ref_text = "(ref:quarter-province)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，X/Y-蔬菜类别/季度）
+
+> 柱状图 * 4，子图（4 * 1）
+
+```{r quarter-category}
+quarter_category <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", quarter, category)
+```
+
+(ref:quarter-category) 各季度各蔬菜类别样本量与合格率
+
+```{r quarter-category-table, results="asis", dev='png'}
+sp_dable(quarter_category, ref_text = "(ref:quarter-category)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，X/Y-品种/季度）
+
+> 柱状图 * 4，子图（4 * 1、1 * 4）
+
+```{r quarter-product}
+quarter_product <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", quarter, product)
+```
+
+(ref:quarter-product) 各季度各品种样本量与合格率
+
+```{r quarter-product-table, results="asis", dev='png'}
+sp_dable(quarter_product, ref_text = "(ref:quarter-product)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格
+
+> 地图？
+
+```{r province-category}
+province_category <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", province, category)
+```
+
+(ref:province-category) 各省份各蔬菜类别样本量与合格率
+
+```{r province-category-table, results="asis", dev='png'}
+sp_dable(province_category, ref_text = "(ref:province-category)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “省份-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格
+
+> 热力图（数量多的维度放纵轴）
+
+```{r province-product}
+province_product <- spec_dataset(dims_comb_data, dims, ana_threshold, "product", province, product)
+```
+
+(ref:province-product) 各省份各品种样本量与合格率
+
+```{r province-product-table, results="asis", dev='png'}
+sp_dable(province_product, ref_text = "(ref:province-product)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-省份”残留风险
+
+&emsp;&emsp;
+
+> 表格（X/Y-(年份季度)/(省份--分行-->(样本量、合格率))）
+
+> 热力图（31 * 20）
+
+```{r year-quarter-province}
+year_quarter_province <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, quarter, province
+)
+```
+
+(ref:year-quarter-province) 各年份各季度各省份样本量与合格率
+
+```{r year-quarter-province-table, results="asis", dev='png'}
+sp_dable(year_quarter_province, ref_text = "(ref:year-quarter-province)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格（X/Y-(年份季度)/(省份--分行-->(样本量、合格率))）
+
+> 热力图（柱状图，分年份）
+
+```{r year-quarter-category}
+year_quarter_category <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, quarter, category
+)
+```
+
+(ref:year-quarter-category) 各年份各季度各蔬菜类别样本量与合格率
+
+```{r year-quarter-category-table, results="asis", dev='png'}
+sp_dable(year_quarter_category, ref_text = "(ref:year-quarter-category)") %>%
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格（X/Y-(年份季度)/(省份--分行-->(样本量、合格率))）
+
+> 热力图（柱状图，分年份）
+
+```{r year-quarter-product}
+year_quarter_product <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, quarter, product
+)
+```
+
+(ref:year-quarter-product) 各年份各季度各品种样本量与合格率
+
+```{r year-quarter-product-table, results="asis", dev='png'}
+sp_dable(year_quarter_product, ref_text = "(ref:year-quarter-product)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，C/R-年份/省份产品类别）
+
+> 柱状图，多子图？
+
+```{r year-province-category}
+year_province_category <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, province, category
+)
+```
+
+(ref:year-province-category) 各年份各省份各蔬菜类别样本量与合格率
+
+```{r year-province-category-table, results="asis", dev='png'}
+sp_dable(year_province_category, ref_text = "(ref:year-province-category)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-省份-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，C/R-年份/省份品种）
+
+> 柱状图，多子图？
+
+```{r year-province-product}
+year_province_product <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, province, product
+)
+```
+
+(ref:year-province-product) 各年份各省份各品种样本量与合格率
+
+```{r year-province-product-table, results="asis", dev='png'}
+sp_dable(year_province_product, ref_text = "(ref:year-province-product)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，C/R-季度/省份产品类别）
+
+> 柱状图，多子图？
+
+```{r quarter-province-category}
+quarter_province_category <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  quarter, province, category
+)
+```
+
+(ref:quarter-province-category) 各季度各省份各蔬菜类别样本量与合格率
+
+```{r quarter-province-category-table, results="asis", dev='png'}
+sp_dable(quarter_province_category, ref_text = "(ref:quarter-province-category)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份-品种”残留风险
+
+&emsp;&emsp;
+
+> 表格（宽表，C/R-季度/省份品种）
+
+> 柱状图，多子图？
+
+```{r quarter-province-product}
+quarter_province_product <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  quarter, province, product
+)
+```
+
+(ref:quarter-province-product) 各季度各省份各品种样本量与合格率
+
+```{r quarter-province-product-table, results="asis", dev='png'}
+sp_dable(quarter_province_product, ref_text = "(ref:quarter-province-product)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-省份-产品类别”残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-province-category, cache=!params$product_env}
+year_quarter_province_category <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, quarter, province, category
+)
+```
+
+(ref:year-quarter-province-category) 各年份各季度各省份各蔬菜类别样本量与合格率
+
+```{r year-quarter-province-category-table, results="asis", dev='png'}
+sp_dable(year_quarter_province_category, ref_text = "(ref:year-quarter-province-category)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-省份-品种”残留风险（不分析）
+
+&emsp;&emsp;
+
+```{r year-quarter-province-product, eval=FALSE}
+year_quarter_province_product <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product", 
+  year, quarter, province, product
+)
+```
+
+(ref:year-quarter-province-product) 各年份各季度各省份各品种样本量与合格率
+
+```{r year-quarter-province-product-table, results="asis", dev='png', eval=FALSE}
+sp_dable(year_quarter_province_product, ref_text = "(ref:year-quarter-province-product)") %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## 药品残留风险 {-}
+
+&emsp;&emsp;
+
+## 总体残留风险
+
+> 文字 + 表格
+
+```{r drug}
+drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", drug)
+```
+
+&emsp;&emsp;`r year_range[1]`-`r year_range[2]` 年共抽取样本 `r nrow(treated_data)` 例。
+
+(ref:drug) 各农药总体检出率与合格率
+
+```{r drug-table, results="asis", dev='png'}
+sp_dable(drug, ref_text = "(ref:drug)")
+```
+
+## 各年份残留风险
+
+&emsp;&emsp;
+
+> 表格（C/R-年份/药物），报告样本量、检出率、合格率
+
+> 热力图（5 * 58） * 2
+
+```{r year-drug}
+year_drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", year, drug)
+```
+
+(ref:year-drug) 各年份各农药检出率与合格率
+
+```{r year-drug-table, results="asis", dev='png'}
+sp_dable(year_drug, ref_text = "(ref:year-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## 各季度残留风险
+
+&emsp;&emsp;
+
+> 表格（C/R-季度/药物），报告样本量、检出率、合格率
+
+> 热力图（5 * 58） * 2
+
+```{r quarter-drug}
+quarter_drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", quarter, drug)
+```
+
+(ref:quarter-drug) 各季度各农药检出率与合格率
+
+```{r quarter-drug-table, results="asis", dev='png'}
+sp_dable(quarter_drug, ref_text = "(ref:quarter-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## 各省份残留风险
+
+&emsp;&emsp;
+
+> 附表？（长表）
+
+> 热力图（31 * 58） * 2
+
+```{r province-drug}
+province_drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", province, drug)
+```
+
+(ref:province-drug) 各省份各农药检出率与合格率
+
+```{r province-drug-table, results="asis", dev='png'}
+sp_dable(province_drug, ref_text = "(ref:province-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## 各蔬菜类别残留风险
+
+&emsp;&emsp;
+
+> 附表？（页面横置，宽表，R/C-药物/蔬菜类别）
+
+> 热力图（13 * 58） * 2
+
+```{r category-drug}
+category_drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", category, drug)
+```
+
+(ref:category-drug) 各蔬菜类别各农药检出率与合格率
+
+```{r category-drug-table, results="asis", dev='png'}
+sp_dable(category_drug, ref_text = "(ref:category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## 各品种残留风险
+
+&emsp;&emsp;
+
+> 附表？（页面横置，宽表，R/C-药物/产品）
+
+> 热力图（107 * 58） * 2
+
+```{r product-drug}
+product_drug <- spec_dataset(dims_comb_data, dims, ana_threshold, "product_drug", product, drug)
+```
+
+(ref:product-drug) 各品种各农药检出率与合格率
+
+```{r product-drug-table, results="asis", dev='png'}
+sp_dable(product_drug, ref_text = "(ref:product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（展开年份和季度，20 * 58）* 2
+
+```{r year-quarter-drug}
+year_quarter_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, drug
+)
+```
+
+(ref:year-quarter-drug) 各年份各季度各农药检出率与合格率
+
+```{r year-quarter-drug-table, results="asis", dev='png'}
+sp_dable(year_quarter_drug, ref_text = "(ref:year-quarter-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-省份”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分年份热力图，5 * 31 * 58）* 2
+
+```{r year-province-drug}
+year_province_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, province, drug
+)
+```
+
+(ref:year-province-drug) 各年份各省份各农药检出率与合格率
+
+```{r year-province-drug-table, results="asis", dev='png'}
+sp_dable(year_province_drug, ref_text = "(ref:year-province-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分年份热力图，5 * 13 * 58）* 2
+
+```{r year-category-drug}
+year_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, category, drug
+)
+```
+
+(ref:year-category-drug) 各年份各蔬菜类别各农药检出率与合格率
+
+```{r year-category-drug-table, results="asis", dev='png'}
+sp_dable(year_category_drug, ref_text = "(ref:year-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-品种”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分年份热力图，5 * 107 * 58）* 2
+
+```{r year-product-drug}
+year_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, product, drug
+)
+```
+
+(ref:year-product-drug) 各年份各品种各农药检出率与合格率
+
+```{r year-product-drug-table, results="asis", dev='png'}
+sp_dable(year_product_drug, ref_text = "(ref:year-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分年份热力图，5 * 31 * 58）* 2
+
+```{r quarter-province-drug}
+quarter_province_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  quarter, province, drug
+)
+```
+
+(ref:quarter-province-drug) 各季度各省份各农药检出率与合格率
+
+```{r quarter-province-drug-table, results="asis", dev='png'}
+sp_dable(quarter_province_drug, ref_text = "(ref:quarter-province-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分季度热力图，4 * 13 * 58）* 2
+
+```{r quarter-category-drug}
+quarter_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  quarter, category, drug
+)
+```
+
+(ref:quarter-category-drug) 各季度各蔬菜类别各农药检出率与合格率
+
+```{r quarter-category-drug-table, results="asis", dev='png'}
+sp_dable(quarter_category_drug, ref_text = "(ref:quarter-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-品种”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 热力图（分季度热力图，4 * 107 * 58）* 2
+
+```{r quarter-product-drug}
+quarter_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  quarter, product, drug
+)
+```
+
+(ref:quarter-product-drug) 各季度各品种各农药检出率与合格率
+
+```{r quarter-product-drug-table, results="asis", dev='png'}
+sp_dable(quarter_product_drug, ref_text = "(ref:quarter-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 附表（长表）
+
+> 极坐标柱状图矩阵（行为省份，列为药物）
+
+```{r province-category-drug}
+province_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  province, category, drug
+)
+```
+
+(ref:province-category-drug) 各省份各蔬菜类别各农药检出率与合格率
+
+```{r province-category-drug-table, results="asis", dev='png'}
+sp_dable(province_category_drug, ref_text = "(ref:province-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “省份-品种”残留风险
+
+&emsp;&emsp;
+
+<!-- > 附表（长表） -->
+
+<!-- > 极坐标柱状图矩阵（行为省份，列为药物） -->
+
+```{r province-product-drug}
+province_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  province, product, drug
+)
+```
+
+(ref:province-product-drug) 各省份各品种各农药检出率与合格率
+
+```{r province-product-drug-table, results="asis", dev='png'}
+sp_dable(province_product_drug, ref_text = "(ref:province-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-省份”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-quarter-province-drug, cache=!params$product_env}
+year_quarter_province_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, province, drug
+)
+```
+
+(ref:year-quarter-province-drug) 各年份各季度各省份各农药检出率与合格率
+
+```{r year-quarter-province-drug-table, results="asis", dev='png'}
+sp_dable(year_quarter_province_drug, ref_text = "(ref:year-quarter-province-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-quarter-category-drug, cache=!params$product_env}
+year_quarter_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, category, drug
+)
+```
+
+(ref:year-quarter-category-drug) 各年份各季度各蔬菜类别各农药检出率与合格率
+
+```{r year-quarter-category-drug-table, results="asis", dev='png'}
+sp_dable(year_quarter_category_drug, ref_text = "(ref:year-quarter-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-品种”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-quarter-product-drug, cache=!params$product_env}
+year_quarter_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, product, drug
+)
+```
+
+(ref:year-quarter-product-drug) 各年份各季度各品种各农药检出率与合格率
+
+```{r year-quarter-product-drug-table, results="asis", dev='png'}
+sp_dable(year_quarter_product_drug, ref_text = "(ref:year-quarter-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-product-category-drug, cache=!params$product_env}
+year_product_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, province, category, drug
+)
+```
+
+(ref:year-product-category-drug) 各年份各省份各蔬菜类别各农药检出率与合格率
+
+```{r year-product-category-drug-table, results="asis", dev='png'}
+sp_dable(year_product_category_drug, ref_text = "(ref:year-product-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-省份-品种”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-product-product-drug, cache=!params$product_env}
+year_product_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, province, product, drug
+)
+```
+
+(ref:year-product-product-drug) 各年份各省份各品种各农药检出率与合格率
+
+```{r year-product-product-drug-table, results="asis", dev='png'}
+sp_dable(year_product_product_drug, ref_text = "(ref:year-product-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份-蔬菜类别”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r quarter-province-category-drug, cache=!params$product_env}
+quarter_province_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  quarter, province, category, drug
+)
+```
+
+(ref:quarter-province-category-drug) 各季度各省份各蔬菜类别各农药检出率与合格率
+
+```{r quarter-province-category-drug-table, results="asis", dev='png'}
+sp_dable(quarter_province_category_drug, ref_text = "(ref:quarter-province-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “季度-省份-品种”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r quarter-province-product-drug, cache=!params$product_env}
+quarter_province_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  quarter, province, product, drug
+)
+```
+
+(ref:quarter-province-product-drug) 各季度各省份各品种各农药检出率与合格率
+
+```{r quarter-province-product-drug-table, results="asis", dev='png'}
+sp_dable(quarter_province_product_drug, ref_text = "(ref:quarter-province-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+## “年份-季度-省份-产品类别”残留风险
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-quarter-province-category-drug, cache=!params$product_env}
+year_quarter_province_category_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, province, category, drug
+)
+```
+
+(ref:year-quarter-province-category-drug) 各年份各季度各省份各蔬菜类别各农药检出率与合格率
+
+```{r year-quarter-province-category-drug-table, results="asis", dev='png'}
+sp_dable(year_quarter_province_category_drug, ref_text = "(ref:year-quarter-province-category-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```
+
+
+## “年份-季度-省份-品种”残留风险（不分析）
+
+&emsp;&emsp;
+
+> 文字（视情况而定）
+
+```{r year-quarter-province-product-drug, eval=FALSE}
+year_quarter_province_product_drug <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "product_drug", 
+  year, quarter, province, product, drug
+)
+```
+
+(ref:year-quarter-province-product-drug) 各年份各季度各省份各品种各农药检出率与合格率
+
+```{r year-quarter-province-product-drug-table, results="asis", dev='png', eval=FALSE}
+sp_dable(year_quarter_province_product_drug, ref_text = "(ref:year-quarter-province-product-drug)") %>% 
+  formatRound("detection_rate_percent", params$digits) %>% 
+  formatRound("qualification_rate_percent", params$digits)
+```

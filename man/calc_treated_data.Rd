@@ -4,7 +4,14 @@
 \alias{calc_treated_data}
 \title{Calculate treated data using raw data and MRL}
 \usage{
-calc_treated_data(raw_data, mrl_data, st_drug, ed_drug)
+calc_treated_data(
+  raw_data,
+  mrl_data,
+  st_drug,
+  ed_drug,
+  raw_col_en2cn = RawColnameTrans,
+  product_name = ProductLabelName
+)
 }
 \arguments{
 \item{raw_data}{a data frame. It is raw detection data of each sample on each drug.
@@ -17,6 +24,11 @@ named with name of drugs. Every row is MRL value of one product on each drugs.}
 \item{st_drug}{a character. Name of the first column of drug.}
 
 \item{ed_drug}{a character. Name of the last column of drug.}
+
+\item{raw_col_en2cn}{list, default \code{\link{RawColnameTrans}}. It is the
+English to Chinese names of dimensions except product.}
+
+\item{product_name}{character. It is the product dimension name.}
 }
 \value{
 a data frame with 3 extra columns compared with `raw_data`.

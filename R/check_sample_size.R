@@ -3,6 +3,8 @@
 #' @param data data frame of raw data or renamed data.
 #' @param dimensions character vector of dimensions to be analysis in \code{data}.
 #' @param path character of \code{.xls(x)} file path.
+#' @param drug_names dimension name for \code{drug}. The default value
+#' is in \code{\link{DrugNames}}.
 #'
 #' @return a data frame of dimension combination which are encoded with 0/1 and
 #' maximum sample size (\code{max_ss}), median sample size (\code{med_ss}) and minimum
@@ -10,9 +12,11 @@
 #' @export
 #'
 #' @examples
-#' # data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
-#' # check_sample_size(data, dimensions = c('a', 'b', 'c'))
-check_sample_size <- function(data, dimensions, path) {
+#' data <- data.frame(a=c(1,2,1,2,1,2,1,2), b=c(1,1,2,2,3,3,1,1), c=c(1,1,1,1,1,1,2,2))
+#' check_sample_size(data, dimensions = c('a', 'b', 'c'))
+check_sample_size <- function(
+  data, dimensions, drug_names = DrugNames, path
+) {
   col_names <- c(dimensions, "min_ss", "med_ss", "max_ss")
   rows <- 2^length(dimensions)
   cols <- length(col_names)
@@ -25,7 +29,8 @@ check_sample_size <- function(data, dimensions, path) {
       dims <- dims_comb[,j]
       for (c in dims) sample_size_stats[,c][rowid] <- 1
 
-      dims <- setdiff(dims, get_option("DrugName"))
+      # dims <- setdiff(dims, get_option("DrugNames"))
+      dims <- base::setdiff(dims, drug_names)
       tmp <- get_sample_size_stats(
         data, draw_figure = FALSE,
         !!!rlang::parse_exprs(dims)

@@ -17,9 +17,3 @@ None
 \description{
 Set Antgreens Option
 }
-\examples{
-# library(antgreens)
-# var_name <- "ProductLabelName"
-# value <- ""
-# set_option(var_name, value)
-}

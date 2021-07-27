@@ -1,0 +1,10 @@
+button.dt-button {
+  padding: 0;
+}
+
+.dataTables_length {
+  position: relative;
+  float: left !important;
+  text-align: center;
+  margin-right: 0.333em;
+}

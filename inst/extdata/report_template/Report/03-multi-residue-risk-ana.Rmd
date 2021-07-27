@@ -1,0 +1,453 @@
+# 蔬菜产品中农药（兽药）多残留风险分析
+
+&emsp;&emsp;
+
+## 总体多残留风险
+
+&emsp;&emsp;
+
+```{r full-sample-multi}
+full_sample_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_residue")
+```
+
+(ref:full-sample-multi) 总体多残留指标
+
+```{r full-sample-multi-table, results="asis", dev='png'}
+sp_dable(full_sample_multi, ref_text = "(ref:full-sample-multi)", filter = "none") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## 各年份多残留风险
+
+&emsp;&emsp;
+
+```{r year-multi}
+year_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_residue", year)
+```
+
+(ref:year-multi) 各年份多残留指标
+
+```{r year-multi-table, results="asis", dev='png'}
+sp_dable(year_multi, ref_text = "(ref:year-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## 各季度多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-multi}
+quarter_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter
+)
+```
+
+(ref:quarter-multi) 各季度多残留指标
+
+```{r quarter-multi-table, results="asis", dev='png'}
+sp_dable(quarter_multi, ref_text = "(ref:quarter-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## 各省份多残留风险
+
+&emsp;&emsp;
+
+```{r province-multi}
+province_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  province
+)
+```
+
+(ref:province-multi) 各省份多残留指标
+
+```{r province-multi-table, results="asis", dev='png'}
+sp_dable(province_multi, ref_text = "(ref:province-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## 各蔬菜类别多残留风险
+
+&emsp;&emsp;
+
+```{r category-multi}
+category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  category
+)
+```
+
+(ref:category-multi) 各蔬菜类别多残留指标
+
+```{r category-multi-table, results="asis", dev='png'}
+sp_dable(category_multi, ref_text = "(ref:category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## 各品种多残留风险
+
+&emsp;&emsp;
+
+```{r product-multi}
+product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  product
+)
+```
+
+(ref:product-multi) 各品种多残留指标
+
+```{r product-multi-table, results="asis", dev='png'}
+sp_dable(product_multi, ref_text = "(ref:product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度”多残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-multi}
+year_quarter_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter
+)
+```
+
+(ref:year-quarter-multi) 各年份各季度多残留指标
+
+```{r year-quarter-multi-table, results="asis", dev='png'}
+sp_dable(year_quarter_multi, ref_text = "(ref:year-quarter-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-省份”多残留风险
+
+&emsp;&emsp;
+
+```{r year-province-multi}
+year_province_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, province
+)
+```
+
+(ref:year-province-multi) 各年份各省份多残留指标
+
+```{r year-province-multi-table, results="asis", dev='png'}
+sp_dable(year_province_multi, ref_text = "(ref:year-province-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r year-category-multi}
+year_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, category
+)
+```
+
+(ref:year-category-multi) 各年份各蔬菜类别多残留指标
+
+```{r year-category-multi-table, results="asis", dev='png'}
+sp_dable(year_category_multi, ref_text = "(ref:year-category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r year-product-multi}
+year_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, product
+)
+```
+
+(ref:year-product-multi) 各年份各品种多残留指标
+
+```{r year-product-multi-table, results="asis", dev='png'}
+sp_dable(year_product_multi, ref_text = "(ref:year-product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “季度-省份”多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-province-multi}
+quarter_province_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter, province
+)
+```
+
+(ref:quarter-province-multi) 各季度各省份多残留指标
+
+```{r quarter-province-multi-table, results="asis", dev='png'}
+sp_dable(quarter_province_multi, ref_text = "(ref:quarter-province-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “季度-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-category-multi}
+quarter_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter, category
+)
+```
+
+(ref:quarter-category-multi) 各季度各蔬菜类别多残留指标
+
+```{r quarter-category-multi-table, results="asis", dev='png'}
+sp_dable(quarter_category_multi, ref_text = "(ref:quarter-category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “季度-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-product-multi}
+quarter_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter, product
+)
+```
+
+(ref:quarter-product-multi) 各季度各品种多残留指标
+
+```{r quarter-product-multi-table, results="asis", dev='png'}
+sp_dable(quarter_product_multi, ref_text = "(ref:quarter-product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “省份-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r province-category-multi}
+province_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  province, category
+)
+```
+
+(ref:province-category-multi) 各省份各蔬菜类别多残留指标
+
+```{r province-category-multi-table, results="asis", dev='png'}
+sp_dable(province_category_multi, ref_text = "(ref:province-category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “省份-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r province-product-multi}
+province_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  province, product
+)
+```
+
+(ref:province-product-multi) 各省份各品种多残留指标
+
+```{r province-product-multi-table, results="asis", dev='png'}
+sp_dable(province_product_multi, ref_text = "(ref:province-product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度-省份”多残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-province-multi}
+year_quarter_province_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter, province
+)
+```
+
+(ref:year-quarter-province-multi) 各年份各季度各省份多残留指标
+
+```{r year-quarter-province-multi-table, results="asis", dev='png'}
+sp_dable(year_quarter_province_multi, ref_text = "(ref:year-quarter-province-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-category-multi}
+year_quarter_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter, category
+)
+```
+
+(ref:year-quarter-category-multi) 各年份各季度各蔬菜类别多残留指标
+
+```{r year-quarter-category-multi-table, results="asis", dev='png'}
+sp_dable(year_quarter_category_multi, ref_text = "(ref:year-quarter-category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-product-multi}
+year_quarter_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter, product
+)
+```
+
+(ref:year-quarter-product-multi) 各年份各季度各品种多残留指标
+
+```{r year-quarter-product-multi-table, results="asis", dev='png'}
+sp_dable(year_quarter_product_multi, ref_text = "(ref:year-quarter-product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-省份-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r year-province-category-multi}
+year_province_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, province, category
+)
+```
+
+(ref:year-province-category-multi) 各年份各省份各蔬菜类别多残留指标
+
+```{r year-province-category-multi-table, results="asis", dev='png'}
+sp_dable(year_province_category_multi, ref_text = "(ref:year-province-category-multi)") %>%
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-省份-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r year-province-product-multi}
+year_province_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, province, product
+)
+```
+
+(ref:year-province-product-multi) 各年份各省份各品种多残留指标
+
+```{r year-province-product-multi-table, results="asis", dev='png'}
+sp_dable(year_province_product_multi, ref_text = "(ref:year-province-product-multi)") %>%
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “季度-省份-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-province-category-multi}
+quarter_province_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter, province, category
+)
+```
+
+(ref:quarter-province-category-multi) 各季度各省份各蔬菜类别多残留指标
+
+```{r quarter-province-category-multi-table, results="asis", dev='png'}
+sp_dable(quarter_province_category_multi, ref_text = "(ref:quarter-province-category-multi)") %>%
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “季度-省份-品种”多残留风险
+
+&emsp;&emsp;
+
+```{r quarter-province-product-multi}
+quarter_province_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  quarter, province, product
+)
+```
+
+(ref:quarter-province-product-multi) 各季度各省份各品种多残留指标
+
+```{r quarter-province-product-multi-table, results="asis", dev='png'}
+sp_dable(quarter_province_product_multi, ref_text = "(ref:quarter-province-product-multi)") %>%
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度-省份-蔬菜类别”多残留风险
+
+&emsp;&emsp;
+
+```{r year-quarter-province-category-multi}
+year_quarter_province_category_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter, province, category
+)
+```
+
+(ref:year-quarter-province-category-multi) 各年份各季度各省份各蔬菜类别多残留指标
+
+```{r year-quarter-province-category-multi-table, results="asis", dev='png'}
+sp_dable(year_quarter_province_category_multi, ref_text = "(ref:year-quarter-province-category-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```
+
+## “年份-季度-省份-品种”多残留风险（不分析）
+
+&emsp;&emsp;
+
+```{r year-quarter-province-product-multi, eval=FALSE}
+year_quarter_province_product_multi <- spec_dataset(
+  dims_comb_data, dims, ana_threshold, "multi_residue", 
+  year, quarter, province, product
+)
+```
+
+(ref:year-quarter-province-product-multi) 各年份各季度各省份各品种多残留指标
+
+```{r year-quarter-province-product-multi-table, results="asis", dev='png', eval=FALSE}
+sp_dable(year_quarter_province_product_multi, ref_text = "(ref:year-quarter-province-product-multi)") %>% 
+  formatRound("multi_detection_rate_percenet", params$digits) %>% 
+  formatRound("multi_defective_rate_percenet", params$digits)
+```

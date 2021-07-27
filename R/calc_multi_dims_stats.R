@@ -53,25 +53,26 @@
 #' ## with `drug`
 #' # multi_dims_stats(treated_data, quarter, drug)
 #' @importFrom magrittr %>%
-#' @importFrom data.table .data
+#' @importFrom dplyr .data
 multi_dims_stats <- function(
   data, ...,
-  drug_colname = "drug", st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
+  drug_colname = "drug",
+  st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
 ) {
   arguments <- dplyr::quos(...)
   args_names <- unlist(lapply(arguments, dplyr::quo_name))
   values_colname <- paste0(drug_colname, "_residual")
   if (drug_colname %in% args_names) {
     data <- data %>%
-      dplyr::select(-c(multi_detection_num, multi_defective_num, is_qualified)) %>%
+      dplyr::select(-c("multi_detection_num", "multi_defective_num", "is_qualified")) %>%
       tidyr::pivot_longer(
         cols = {{st_drug_name}}:{{ed_drug_name}},
         names_to = drug_colname,
         values_to = values_colname
       ) %>%
       dplyr::mutate(
-        is_detected = .data[[values_colname]] > 0,
-        is_qualified = .data[[values_colname]] <= 1,
+        "is_detected" = .data[[values_colname]] > 0,
+        "is_qualified" = .data[[values_colname]] <= 1,
       )
   }
   md_stats <- data %>%
@@ -132,13 +133,16 @@ multi_dims_stats <- function(
 #' # multi_dims_stats_dt(treated_data)
 #' ## with `drug`
 #' # multi_dims_stats_dt(treated_data, quarter, drug)
+#' @importFrom data.table .N .SD :=
 multi_dims_stats_dt <- function(
   data, ...,
-  drug_colname = "drug", st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
+  drug_colname = "drug",
+  st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
 ) {
   arguments <- dplyr::quos(...)
   args_names <- unlist(lapply(arguments, dplyr::quo_name))
   values_colname <- paste0(drug_colname, "_residual")
+  if (!data.table::is.data.table(data)) data <- data.table::as.data.table(data)
   if (drug_colname %in% args_names) {
     data <- data[,!c("multi_detection_num", "multi_defective_num", "is_qualified")]
     drug_col_ids <- which(colnames(data) == st_drug_name):which(colnames(data) == ed_drug_name)
@@ -150,8 +154,8 @@ multi_dims_stats_dt <- function(
       variable.name = drug_colname,
       value.name = values_colname
     )
-    data[,is_detected := lapply(.SD, function(x) {x > 0}), .SD = c(values_colname)]
-    data[,is_qualified := lapply(.SD, function(x) {x <= 0}), .SD = c(values_colname)]
+    data[,"is_detected" := lapply(.SD, function(x) {x > 0}), .SD = c(values_colname)]
+    data[,"is_qualified" := lapply(.SD, function(x) {x <= 0}), .SD = c(values_colname)]
   }
   if (drug_colname %in% args_names) {
     md_stats <- data[
@@ -201,8 +205,7 @@ multi_dims_stats_dt <- function(
 #'
 #' @examples
 #' # treated_data <- calc_treated_data(raw_data, mrl_data, "\u7532\u80fa\u78f7", "\u4e8c\u7532\u620a\u7075")
-#' # data <- data.table::as.data.table(treated_data)
-#' # dims <- c("year", "quarter", "province", "category", "product", "drug")
+#' # dims <- c(names(RawColumnTrans), "product", "drug")
 #' ## fast mode
 #' # gen_dims_comb_stats(data, dims)
 #' ## slow mode
@@ -220,6 +223,7 @@ gen_dims_comb_stats <- function(data, all_dims, fast = TRUE) {
         sp_dims <- rlang::parse_exprs(dims_comb[,j])
         var_name <- paste0(dims_comb[,j], collapse = '_')
         if (var_name == "") var_name <- "full_sample"
+
         data <- data.table::as.data.table(data)
         if (fast) {
           dims_comb_data[[rlang::parse_expr(var_name)]] <- multi_dims_stats_dt(data, !!!sp_dims)
