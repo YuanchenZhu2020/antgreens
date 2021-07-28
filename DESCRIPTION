@@ -20,6 +20,7 @@ Imports:
     bookdown,
     data.table,
     dplyr,
+    DT,
     magrittr,
     openxlsx,
     Rcpp,

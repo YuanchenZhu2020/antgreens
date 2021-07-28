@@ -122,7 +122,7 @@ webshot::install_phantomjs()
 ```
 
 ```{r report_setup, include=FALSE}
-##### DT and dable settings #####
+##### DT and report settings #####
 # `dable` is the customized function of DT::databale
 options(
   htmltools.dir.version = FALSE, formatR.indent = 2,

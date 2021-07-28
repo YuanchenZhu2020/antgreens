@@ -23,6 +23,15 @@ DrugNames <- c("\u836f\u7269", "\u519c\u836f")
 #' @export
 ThresholdName <- "\u9608\u503c"
 
+#' Quarters Readable Name
+#' @export
+quarter_readable <- list(
+  `1` = "\u7b2c\u4e00\u5b63\u5ea6",
+  `2` = "\u7b2c\u4e8c\u5b63\u5ea6",
+  `3` = "\u7b2c\u4e09\u5b63\u5ea6",
+  `4` = "\u7b2c\u56db\u5b63\u5ea6"
+)
+
 #' I18N Settings for DataTable
 #'
 #' @export

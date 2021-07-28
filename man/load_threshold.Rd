@@ -6,8 +6,8 @@
 \usage{
 load_threshold(
   path,
-  dims_en2cn = modifyList(RawColnameTrans, list(product = ProductLabelName, drug =
-    DrugNames[1])),
+  dims_en2cn = utils::modifyList(RawColnameTrans, list(product = ProductLabelName, drug
+    = DrugNames[1])),
   threshold_key = ThresholdName
 )
 }
