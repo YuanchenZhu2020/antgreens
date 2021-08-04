@@ -1,3 +1,23 @@
+#' Make Quarter Readable in Table
+#'
+#' @description use readable name of quarters to replace number of quarters.
+#'
+#' @param df data frame contains column named with "quarter"
+#'
+#' @return data frame with readable "quarter" column
+#' @export
+#'
+#' @examples
+#' df <- data.frame(quarter = c(1,2,3,4))
+#' df <- make_quarter_readable(df)
+make_quarter_readable <- function(df) {
+  df[["quarter"]][df[["quarter"]] == 1] <- quarter_readable$`1`
+  df[["quarter"]][df[["quarter"]] == 2] <- quarter_readable$`2`
+  df[["quarter"]][df[["quarter"]] == 3] <- quarter_readable$`3`
+  df[["quarter"]][df[["quarter"]] == 4] <- quarter_readable$`4`
+  return(df)
+}
+
 #' Make Columns As Factor
 #'
 #' @param dataset data frame with readable "quarter" column
@@ -29,7 +49,6 @@ factor_dims <- function(dataset, dim_names, funcs = list(), quarter_readable = T
   return(dataset)
 }
 
-#'
 #' @export
 factor_year <- function(dataset) {
   year_levels <- sort(unique(dataset[['year']]))
@@ -40,7 +59,6 @@ factor_year <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 factor_quarter <- function(dataset) {
   quarter_levels <- sapply(1:4, \(x) {quarter_readable[[x]]})
@@ -48,7 +66,6 @@ factor_quarter <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 factor_province <- function(dataset) {
   province_levels <- sort(unique(dataset[['province']]))
@@ -59,7 +76,6 @@ factor_province <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 factor_category <- function(dataset) {
   category_levels <- sort(unique(dataset[['category']]))
@@ -70,7 +86,6 @@ factor_category <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 factor_product <- function(dataset) {
   product_levels <- sort(unique(dataset[['product']]))
@@ -81,7 +96,6 @@ factor_product <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 factor_drug <- function(dataset) {
   drug_levels <- sort(unique(dataset[['drug']]))
@@ -92,7 +106,6 @@ factor_drug <- function(dataset) {
   return(dataset)
 }
 
-#'
 #' @export
 #' @importFrom magrittr %>%
 readable_factor_quarter <- function(dataset) {
@@ -100,6 +113,23 @@ readable_factor_quarter <- function(dataset) {
     make_quarter_readable() %>%
     factor_quarter()
   return(dataset)
+}
+
+#' Arrange Rows by Multiple Columns
+#'
+#' @param data a data frame
+#' @param ... quoted column names
+#'
+#' @return a data frame with arranged rows
+#' @export
+#'
+#' @examples
+#' df <- data.frame(a = c(4, 6, 2), b = c('a', 's', 'd'))
+#' df <- arrange_rows(df, a, b)
+arrange_rows <- function(data, ...) {
+  data <- data %>%
+    arrange(...)
+  return(data)
 }
 
 #' Get Corresponding Threshold Value
@@ -209,14 +239,14 @@ spec_dataset <- function(
         multi_defective_rate = 100 * multi_defective_rate
       ) %>%
       rename(
-        multi_detection_rate_percenet = multi_detection_rate,
-        multi_defective_rate_percenet = multi_defective_rate
+        multi_detection_rate_percent = multi_detection_rate,
+        multi_defective_rate_percent = multi_defective_rate
       )
     if (!is.na(digits)) {
       data <- data %>%
         mutate(
-          multi_detection_rate_percenet = round(multi_detection_rate_percenet, digits),
-          multi_defective_rate_percenet = round(multi_defective_rate_percenet, digits)
+          multi_detection_rate_percent = round(multi_detection_rate_percent, digits),
+          multi_defective_rate_percent = round(multi_defective_rate_percent, digits)
         )
     }
   }

@@ -1,23 +1,3 @@
-#' Make Quarter Readable in Table
-#'
-#' @description use readable name of quarters to replace number of quarters.
-#'
-#' @param df data frame contains column named with "quarter"
-#'
-#' @return data frame with readable "quarter" column
-#' @export
-#'
-#' @examples
-#' df <- data.frame(quarter = c(1,2,3,4))
-#' df <- make_quarter_readable(df)
-make_quarter_readable <- function(df) {
-  df[["quarter"]][df[["quarter"]] == 1] <- quarter_readable$`1`
-  df[["quarter"]][df[["quarter"]] == 2] <- quarter_readable$`2`
-  df[["quarter"]][df[["quarter"]] == 3] <- quarter_readable$`3`
-  df[["quarter"]][df[["quarter"]] == 4] <- quarter_readable$`4`
-  return(df)
-}
-
 #' Print caption for DT::datatable in bookdown
 #'
 #' @description `dt_table_caption()` print the HTML tags of table caption for

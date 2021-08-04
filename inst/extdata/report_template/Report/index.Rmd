@@ -75,6 +75,7 @@ knitr::opts_chunk$set(
 	fig.height = 6,
 	fig.pos = "H",
 	fig.width = 8,
+	fig.align = "center",
 	message = FALSE,
 	warning = FALSE,
 	out.extra = "",
@@ -122,6 +123,15 @@ webshot::install_phantomjs()
 ```
 
 ```{r report_setup, include=FALSE}
+provinces_trans_short <- list()
+for (i in 1:length(ProvinceShort)) {
+  provinces_trans_short[[ProvinceStandrad[i]]] <- ProvinceShort[i]
+}
+provinces_short_trans_pinyin <- list()
+for (i in 1:length(ProvinceShort)) {
+    provinces_short_trans_pinyin[[ProvinceShort[i]]] <- ProvincePinyin[i]
+}
+
 ##### DT and report settings #####
 # `dable` is the customized function of DT::databale
 options(
@@ -130,7 +140,9 @@ options(
   # warnPartialMatchAttr = FALSE, warnPartialMatchDollar = FALSE,
   DT.options = DTOptions,
   report.options = list(
-    colnameMap = modifyList(ColnamesI18n$chinese, params$colname_map)
+    colnameMap = modifyList(ColnamesI18n$chinese, params$colname_map),
+    provinceTransShort = provinces_trans_short,
+    provinceTransPinyin = provinces_short_trans_pinyin
   )
 )
 ```
