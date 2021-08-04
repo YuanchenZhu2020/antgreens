@@ -80,19 +80,19 @@ multi_dims_stats <- function(
   if (drug_colname %in% args_names) {
     md_stats <- md_stats %>%
       dplyr::summarise(
-        sample_size = dplyr::n(),
-        detection_rate = sum(is_detected) / dplyr::n(),
-        qualification_rate = sum(is_qualified) / dplyr::n()
+        "sample_size" = dplyr::n(),
+        "detection_rate" = sum(.data[["is_detected"]]) / dplyr::n(),
+        "qualification_rate" = sum(.data[["is_qualified"]]) / dplyr::n()
       )
   } else {
     md_stats <- md_stats %>%
       dplyr::summarise(
-        sample_size = dplyr::n(),
-        qualification_rate = sum(is_qualified) / dplyr::n(),
-        multi_detection_rate = sum(multi_detection_num >= 2) / dplyr::n(),
-        max_detection_num = max(multi_detection_num),
-        multi_defective_rate = sum(multi_defective_num >= 2) / dplyr::n(),
-        max_defective_num = max(multi_defective_num)
+        "sample_size" = dplyr::n(),
+        "qualification_rate" = sum(.data[["is_qualified"]]) / dplyr::n(),
+        "multi_detection_rate" = sum(.data[["multi_detection_num"]] >= 2) / dplyr::n(),
+        "max_detection_num" = max(.data[["multi_detection_num"]]),
+        "multi_defective_rate" = sum(.data[["multi_defective_num"]] >= 2) / dplyr::n(),
+        "max_defective_num" = max(.data[["multi_defective_num"]])
       )
   }
   return(md_stats)

@@ -123,6 +123,14 @@ webshot::install_phantomjs()
 ```
 
 ```{r report_setup, include=FALSE}
+# dimensions to be analyzed
+ana_dims <- c(names(params$ana_dims_part), "product", "drug")
+# names translator of dimensions to be analyzed 
+ana_dims_en2cn <- modifyList(
+  params$ana_dims_part, 
+  list(product = params$ana_dims_product, drug = params$ana_dims_drug)
+)
+# province names translator
 provinces_trans_short <- list()
 for (i in 1:length(ProvinceShort)) {
   provinces_trans_short[[ProvinceStandrad[i]]] <- ProvinceShort[i]
@@ -157,10 +165,6 @@ pesticides <- readxl::read_excel(params$pesticides)
 ```
 
 ```{r load_threshold_data, include=FALSE, cache=!params$product_env}
-ana_dims_en2cn <- modifyList(
-  params$ana_dims_part, 
-  list(product = params$ana_dims_product, drug = params$ana_dims_drug)
-)
 ana_threshold <- load_threshold(
   params$ana_threshold, dims_en2cn = ana_dims_en2cn, threshold_key = params$threshold_kw
 )
@@ -174,8 +178,7 @@ treated_data <- calc_treated_data(
 ```
 
 ```{r generate_dims_combination_data, include=FALSE, cache=!params$product_env}
-dims <- c(names(params$ana_dims_part), "product", "drug")
-dims_comb_data <- gen_dims_comb_stats(data, dims, fast = TRUE)
+dims_comb_data <- gen_dims_comb_stats(data, ana_dims, fast = TRUE)
 ```
 
 ```{r load_other_codes, include=FALSE}

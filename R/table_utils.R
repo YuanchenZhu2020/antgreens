@@ -127,7 +127,7 @@ sp_dable <- function(
     autoHideNavigation = dplyr::expr(getOption("DT.autoHideNavigation", NULL))
   )
 
-  update_params <- modifyList(
+  update_params <- utils::modifyList(
     default_params,
     arguments
   )

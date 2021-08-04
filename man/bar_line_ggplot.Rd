@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_utils.R
 \name{bar_line_ggplot}
 \alias{bar_line_ggplot}
-\title{Plot bar and line plot in same figure}
+\title{Plot bar and line figure in the same figure}
 \usage{
 bar_line_ggplot(
   dataset,
@@ -17,15 +17,15 @@ bar_line_ggplot(
   line_color = "black",
   point_color = "white",
   legend_pos = c("none", "left", "right", "bottom", "top"),
-  label_size
+  label_size = 12
 )
 }
 \arguments{
-\item{bar_var}{}
+\item{label_size}{}
 }
 \value{
 
 }
 \description{
-Plot bar and line plot in same figure
+Plot bar and line figure in the same figure
 }

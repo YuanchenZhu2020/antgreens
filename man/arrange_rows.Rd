@@ -15,7 +15,8 @@ arrange_rows(data, ...)
 a data frame with arranged rows
 }
 \description{
-Arrange Rows by Multiple Columns
+Arrange rows in a data frame according by the columns provided. The order of
+columns will determine the order of arrangement.
 }
 \examples{
 df <- data.frame(a = c(4, 6, 2), b = c('a', 's', 'd'))

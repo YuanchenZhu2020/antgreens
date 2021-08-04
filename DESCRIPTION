@@ -1,7 +1,7 @@
 Package: antgreens
 Type: Package
 Title: Automatic Generation of Vegetable Report
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R:
   person("Yuanchen", "Zhu", email = "yuanchenzhu@126.com", role = c("aut", "cre"))
 Author: Yuanchen Zhu [aut, cre]
@@ -21,6 +21,7 @@ Imports:
     data.table,
     dplyr,
     DT,
+    ggplot2,
     magrittr,
     openxlsx,
     Rcpp,

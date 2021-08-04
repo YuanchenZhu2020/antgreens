@@ -1,4 +1,4 @@
-#' Plot bar and line plot in same figure
+#' Plot bar and line figure in the same figure
 #'
 #' @param dataset
 #' @param x_var
@@ -11,6 +11,8 @@
 #' @param point_color
 #' @param legend_pos
 #' @param bar_var
+#' @param scale_blank_div
+#' @param label_size
 #'
 #' @return
 #' @export
@@ -22,13 +24,12 @@ bar_line_ggplot <- function(
   main_axis_name, sec_axis_name, x_axis_name,
   bar_fill_palette = "grey", line_color = "black", point_color = "white",
   legend_pos = c("none", "left", "right", "bottom", "top"),
-  label_size
+  label_size = 12
 ) {
   # use first column as x axis variable if `x_var` is not giving
   x_var <- ifelse(!missing(x_var), rlang::quo_name(x_var), colnames(dataset)[1])
   bar_var <- "sample_size"
   line_var <- base::setdiff(colnames(dataset), c(x_var, bar_var))[1]
-  # cat(x_var, bar_var, line_var, collapse = "\n")
 
   # get sacle params and funcs for secondary axis
   if (is.na(scale_interval) || !is.numeric(scale_interval) || length(scale_interval) != 2) {
@@ -75,42 +76,42 @@ bar_line_ggplot <- function(
     bar_fill_palette <- rep(bar_fill_palette[1], nlevels(dataset[[x_var]]))
   }
 
-  p <- ggplot(data = dataset) +
-    geom_col(
-      mapping = aes(x = !!ensym(x_var), y = !!ensym(bar_var), fill = !!ensym(x_var)),
+  p <- ggplot2::ggplot(data = dataset) +
+    ggplot2::geom_col(
+      mapping = ggplot2::aes(x = !!ensym(x_var), y = !!ensym(bar_var), fill = !!ensym(x_var)),
       width = 0.6
     ) +
     scale_fill_manual(values = bar_fill_palette) +
-    scale_y_continuous(sec.axis = sec_axis(trans = ~inv_scale_func(.), name = sec_axis_name)) +
-    geom_line(
-      mapping = aes(x = !!ensym(x_var), y = scale_func(!!ensym(line_var)), group = 1),
+    ggplot2::scale_y_continuous(sec.axis = sec_axis(trans = ~inv_scale_func(.), name = sec_axis_name)) +
+    ggplot2::geom_line(
+      mapping = ggplot2::aes(x = !!ensym(x_var), y = scale_func(!!ensym(line_var)), group = 1),
       color = line_color, size = 1.5
     ) +
-    geom_point(
-      mapping = aes(x = !!ensym(x_var), y = scale_func(!!ensym(line_var))),
+    ggplot2::geom_point(
+      mapping = ggplot2::aes(x = !!ensym(x_var), y = scale_func(!!ensym(line_var))),
       color = point_color, size = 2
     ) +
-    geom_label(
-      mapping = aes(
+    ggplot2::geom_label(
+      mapping = ggplot2::aes(
         x = !!ensym(x_var), y = scale_func(!!ensym(line_var)),
         label = paste(round(!!rlang::ensym(line_var), 2), '%'),
         label.paddng = 0
       ),
       vjust = -0.5
     ) +
-    geom_text(
-      mapping = aes(
+    ggplot2::geom_text(
+      mapping = ggplot2::aes(
         x = !!ensym(x_var), y = !!ensym(bar_var),
         label = !!ensym(bar_var)
       ),
       vjust = -0.5,
       show.legend = FALSE
     ) +
-    labs(x = x_axis_name, y = main_axis_name) +
-    theme(
+    ggplot2::labs(x = x_axis_name, y = main_axis_name) +
+    ggplot2::theme(
       axis.title = element_text(size = 13),
       legend.position = legend_pos[1]
     ) +
-    geom_blank()
+    ggplot2::geom_blank()
   return(p)
 }
