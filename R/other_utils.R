@@ -32,8 +32,8 @@ arrange_rows <- function(data, ...) {
 #'
 #' @examples
 #' df <- data.frame(a = c(11, 23, 1), b = c(0.2, 0.3, 0.1))
-#' get_odds_bounds(df, 'a')
-#' get_odds_bounds(df, 'b', increment = 0.2)
+#' get_odds_bounds(df, 'a', lower = FALSE)
+#' get_odds_bounds(df, 'b', increment = 0.2, lower = FALSE)
 get_odds_bounds <- function(data, column_name, lower = TRUE, increment = 5) {
   bounds <- seq(0, ifelse(increment <= 1, 1, 100), increment)
   if (lower) bound <- bounds[max(1, which(min(data[[column_name]]) <= bounds)[1] - 1)]
@@ -81,6 +81,9 @@ get_bounds <- function(data, column_name, increment = 5, upper_shrink = FALSE, s
 #' @param data a data frame.
 #' @param year_name character, default 'year'. It is the column name representing the year.
 #' @param quarter_name character, default 'quarter'. It is the column name representing the quarter.
+#' @param simple logical, default \code{TRUE}. If set `TRUE` then use number as quarter name.
+#' @param quarter_trans list containing 4 characters and the names of each element is 1, 2, 3, 4,
+#' which represents the four quarters.
 #'
 #' @return a data frame with column \code{timeline} and without column \code{year_name} and
 #' \code{quarter_name}.
@@ -90,13 +93,88 @@ get_bounds <- function(data, column_name, increment = 5, upper_shrink = FALSE, s
 #' df <- data.frame(a = 2017:2021, b = c(1,2,2,4,3))
 #' combine_year_quarter(df, year_name = 'a', quarter_name = 'b')
 #' @importFrom magrittr %>%
-combine_year_quarter <- function(data, year_name = "year", quarter_name = "quarter"){
+combine_year_quarter <- function(
+  data, year_name = "year", quarter_name = "quarter",
+  simple = TRUE, quarter_trans = quarter_readable
+){
   data <- data %>%
-    dplyr::mutate(timeline = paste0(.data[[year_name]], "-Q", .data[[quarter_name]])) %>%
-    dplyr::select(-c(dplyr::all_of(year_name), dplyr::all_of(quarter_name)))
+    dplyr::rename("quarter" = .data[[quarter_name]])
+  if (simple) {
+    data <- data %>%
+      dplyr::mutate(timeline = paste0(.data[[year_name]], "-Q", "quarter"))
+  }
+  else {
+    data <- data %>%
+      factor_quarter(readable = TRUE, quarter_trans = quarter_trans) %>%
+      dplyr::mutate(timeline = paste0(.data[[year_name]], "\u5e74", .data[["quarter"]]))
+  }
+  data <- data %>%
+    dplyr::select(-c(dplyr::all_of(year_name), "quarter"))
   return(data)
 }
 
+#' Change Qulification Rate (Percent) to Fractration Defective (Percent)
+#'
+#' @description \code{change_to_defective(df)} will change the \code{qualification_rate} column in
+#' \code{df} to \code{defective_rate} using \eqn{1 - qualification_rate}, or change the
+#' \code{qualification_rate_percent} column in \code{df} to \code{defective_rate_percent} column
+#' using \eqn{100 - qualification_rate_percent}.
+#'
+#' @param data data frame with \code{qualification_rate(_percent)} column
+#' @param use_percent logical, default TRUE. Whether to use "percent" suffix.
+#' @param digits numeric, default 2. The number of dicimal reserved when using minus to change
+#' to defective.
+#'
+#' @return a data frame with \code{fractration_rate(_percent)} column.
+#' @export
+#'
+#' @examples
+#' df <- data.frame(qualification_rate = runif(3, 0, 1), qualification_rate_percent = runif(3, 0, 100))
+#' change_to_defective(df, use_percent = FALSE)
+#' change_to_defective(df)
+#' @importFrom magrittr %>%
+change_to_defective <- function(data, use_percent = TRUE, digits = 2) {
+  defective_name <- rlang::sym(
+    ifelse(use_percent, "rate_percent", "rate")
+  )
+  qualification_name <- ifelse(use_percent, "qualification_rate_percent", "qualification_rate")
+  full <- ifelse(use_percent, 100, 1)
+  data <- data %>%
+    dplyr::mutate("defective_{{defective_name}}" := round(full - .data[[qualification_name]], digits)) %>%
+    dplyr::select(-.data[[qualification_name]])
+  return(data)
+}
+
+#' Change Integer Column to Numeric in Data Frame
+#'
+#' @param data data frame with integer column
+#' @param column_name character. The column name of integer column.
+#'
+#' @return data frame with numerci column
+#' @export
+#'
+#' @examples
+#' df <- data.frame(a = as.integer(1:3))
+#' int_to_numeric(df, 'a')
+int_to_numeric <- function(data, column_name) {
+  if (!inherits(data[[column_name]], "integer")) {
+    stop(column_name, " must be integer")
+  }
+  data[[column_name]] <- as.numeric(data[[column_name]])
+  return(data)
+}
+
+#' Shorten Province Names
+#'
+#' @param data data frame with column named "province"
+#'
+#' @return a data frame which province column contains short names of province
+#' @export
+shorten_province_name <- function(data) {
+  provinces_trans <- getOption("report.options")[["provinceTrans"]]
+  data[["province"]] <- sapply(as.character(data[["province"]]), \(x) {provinces_trans[[x]]})
+  return(data)
+}
 
 #' Get Corresponding Threshold Value
 #'
@@ -165,8 +243,8 @@ spec_dataset <- function(
     data <- data %>%
       filter(.data[["sample_size"]] >= threshold) %>%
       select(..., "sample_size", "qualification_rate") %>%
-      mutate(qualification_rate = 100 * qualification_rate) %>%
-      rename(qualification_rate_percent = qualification_rate)
+      mutate("qualification_rate" = 100 * .data[["qualification_rate"]]) %>%
+      rename("qualification_rate_percent" = "qualification_rate")
     if (!is.na(digits)) {
       data <- data %>%
         mutate("qualification_rate_percent" = round(.data[["qualification_rate_percent"]], digits))

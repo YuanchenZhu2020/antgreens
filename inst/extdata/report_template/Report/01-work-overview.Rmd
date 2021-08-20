@@ -34,6 +34,7 @@ provinces_sample_size <- treated_data %>%
   select(province, province_en, starts_with("year")) %>% 
   rowwise() %>% 
   mutate(total = sum(c_across(starts_with("year_"))))
+provinces_sample_size[["province"]] <- factor(provinces_sample_size[["province"]])
 ```
 
 &emsp;&emsp;`r year_range[1]`-`r year_range[2]` 年共抽取样本 `r nrow(treated_data)` 例。 
@@ -50,20 +51,6 @@ sp_dable(
   colnames = c("省份", "英文名", "2016", "2017", "2018", "2019", "2020", "总计"),
   order = list(list(order_colname, "desc"))
 )
-
-# dt_shiny(provinces_sample_size)
-# shiny::renderTable(provinces_sample_size)
-
-# dt_table_caption("(ref:area-sample-size)")
-# datatable(
-#   provinces_sample_size, extensions = 'Buttons',
-#   colnames = c("省份", "英文名", "2016", "2017", "2018", "2019", "2020", "总计"),
-#   rownames = FALSE,
-#   filter = list(position = 'top'),
-#   options = list(
-#     order = list(list(which(order_colname == colnames(provinces_sample_size)) - 1, "desc"))
-#   )
-# )
 ```
 
 ## 蔬菜品种及其分类
@@ -98,44 +85,6 @@ sp_dable(
   ref_text = "(ref:variety-category)",
   container = vc_table_container
 )
-
-# dt_shiny(products)
-
-# dt_table_caption("(ref:variety-category)")
-# datatable(
-#   products, extensions = 'Buttons',
-#   container = vc_table_container,
-#   rownames = FALSE,
-#   filter = list(position = 'top')
-# )
-```
-
-```{r variety-category-latex, eval=FALSE}
-products <- products %>% 
-  rownames_to_column(var = "id") %>%
-  select(id, product_cn, product_en, category_cn, category_en)
-if (knitr::is_latex_output()) {
-  products[["category_cn"]][duplicated(products[["category_cn"]])] <- NA
-  products[["category_en"]][duplicated(products[["category_en"]])] <- NA
-}
-kbl(
-  products,
-  # format = "latex",
-  align = 'c',
-  col.names = c("", "中文名称", "英文名称", "中文名称", "英文名称"),
-  longtable = TRUE,
-  booktabs = TRUE,
-  caption = "(ref:variety-category)"
-) %>%
-  add_header_above(c("", "品种" = 2, "类别" = 2)) %>% 
-  kable_styling(
-    latex_options = "repeat_header",
-    repeat_header_text = "\\textit{（续）}"
-  ) %>%
-  column_spec(2, width = "4cm") %>%
-  column_spec(3, width = "4cm") %>% 
-  column_spec(4, width = "2.5cm") %>%
-  column_spec(5, width = "2.5cm")
 ```
 
 ## 检测项目

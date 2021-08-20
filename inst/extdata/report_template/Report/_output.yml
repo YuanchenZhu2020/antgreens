@@ -8,7 +8,6 @@ bookdown::gitbook:
         <li><a href="./">农产品质量安全中长期风险调查分析报告（2016-2020）（蔬菜）</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">由 bookdown 强力驱动</a></li>
-    download: ["pdf"]
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex

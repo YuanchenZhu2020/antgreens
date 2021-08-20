@@ -70,6 +70,9 @@ set_option <- function(var_name, value) {
   )
 }
 
+
+##### Current Version #####
+
 #' Options for DT Package
 #'
 #' @export

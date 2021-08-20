@@ -12,7 +12,8 @@ check_sample_size(data, dimensions, drug_names = DrugNames, path)
 \item{dimensions}{character vector of dimensions to be analysis in \code{data}.}
 
 \item{drug_names}{dimension name for \code{drug}. The default value
-is in \code{\link{DrugNames}}.}
+is in \code{\link{DrugNames}}. If \code{dimensions} contains \code{drug}, then should
+specify this parameters.}
 
 \item{path}{character of \code{.xls(x)} file path.}
 }

@@ -24,6 +24,6 @@ Get Lower/Upper Bounds for Odds to Display
 }
 \examples{
 df <- data.frame(a = c(11, 23, 1), b = c(0.2, 0.3, 0.1))
-get_odds_bounds(df, 'a')
-get_odds_bounds(df, 'b', increment = 0.2)
+get_odds_bounds(df, 'a', lower = FALSE)
+get_odds_bounds(df, 'b', increment = 0.2, lower = FALSE)
 }

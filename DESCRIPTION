@@ -21,13 +21,16 @@ Imports:
     data.table,
     dplyr,
     DT,
+    echarts4r,
     ggplot2,
+    htmlwidgets,
     magrittr,
     openxlsx,
     Rcpp,
     readr,
     readxl,
     rlang,
+    scales,
     tidyr
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1

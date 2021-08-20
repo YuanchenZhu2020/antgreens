@@ -4,7 +4,13 @@
 \alias{combine_year_quarter}
 \title{Combine the Year and Quarter Column into '2021-Q1' Form}
 \usage{
-combine_year_quarter(data, year_name = "year", quarter_name = "quarter")
+combine_year_quarter(
+  data,
+  year_name = "year",
+  quarter_name = "quarter",
+  simple = TRUE,
+  quarter_trans = quarter_readable
+)
 }
 \arguments{
 \item{data}{a data frame.}
@@ -12,6 +18,11 @@ combine_year_quarter(data, year_name = "year", quarter_name = "quarter")
 \item{year_name}{character, default 'year'. It is the column name representing the year.}
 
 \item{quarter_name}{character, default 'quarter'. It is the column name representing the quarter.}
+
+\item{simple}{logical, default \code{TRUE}. If set `TRUE` then use number as quarter name.}
+
+\item{quarter_trans}{list containing 4 characters and the names of each element is 1, 2, 3, 4,
+which represents the four quarters.}
 }
 \value{
 a data frame with column \code{timeline} and without column \code{year_name} and

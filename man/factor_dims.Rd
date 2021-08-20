@@ -4,17 +4,27 @@
 \alias{factor_dims}
 \title{Make Columns As Factor}
 \usage{
-factor_dims(dataset, dim_names, funcs = list(), quarter_readable = TRUE)
+factor_dims(
+  dataset,
+  ...,
+  funcs = list(),
+  quarter_readable = TRUE,
+  quarter_trans = quarter_readable
+)
 }
 \arguments{
-\item{dataset}{data frame with readable "quarter" column
-or "year"/"province"/"category"/"product"/"drug" column.}
+\item{dataset}{data frame with readable \code{quarter} column
+or \code{year}/\code{province}/\code{category}/\code{product}/\code{drug}/\code{timeline} column.}
 
-\item{dim_names}{character vector.}
+\item{...}{dimensions to be made as factor.}
 
-\item{funcs}{named list of customed factor function}
+\item{funcs}{named list of custome factor function}
 
-\item{quarter_readable}{logical, default TRUE.}
+\item{quarter_readable}{logical, default \code{TRUE}. If set \code{TRUE} then make
+quarter column readable and as a factor.}
+
+\item{quarter_trans}{list containing 4 characters and the names of each element is 1, 2, 3, 4,
+which represents the four quarters.}
 }
 \value{
 data frame with factor column. And the order of quarter is
@@ -24,4 +34,8 @@ on the dictionary order of character.
 }
 \description{
 Make Columns As Factor
+}
+\examples{
+data <- data.frame(year = 2016:2019, quarter = c(1,2,3,4))
+factor_dims(data, year, quarter, quarter_trans = list(`1`='a',`2`='b',`3`='c',`4`='d'))
 }

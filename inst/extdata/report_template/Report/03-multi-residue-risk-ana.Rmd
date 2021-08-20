@@ -4,8 +4,6 @@
 
 ## 总体多残留风险
 
-&emsp;&emsp;
-
 ```{r full-sample-multi}
 full_sample_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_residue")
 ```
@@ -13,106 +11,284 @@ full_sample_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_re
 (ref:full-sample-multi) 总体多残留指标
 
 ```{r full-sample-multi-table, results="asis", dev='png'}
-sp_dable(full_sample_multi, ref_text = "(ref:full-sample-multi)", filter = "none") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(full_sample_multi, ref_text = "(ref:full-sample-multi)", filter = "none")
 ```
+
+&emsp;&emsp;表 \@ref(tab:full-sample-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年蔬菜类产品的抽检样本量及多残留指标。可以看出，`r year_range[1]` - `r year_range[2]` 年共抽取样本 `r full_sample_multi[["sample_size"]]` 例，多残留检出率为 `r full_sample_multi[["multi_detection_rate_percent"]]`%，最大多残留检出数为 `r full_sample_multi[["max_detection_num"]]`，多残留超标率为 `r full_sample_multi[["multi_defective_rate_percent"]]`%，最大多残留超标数为 `r full_sample_multi[["max_defective_num"]]`。
 
 ## 各年份多残留风险
 
-&emsp;&emsp;
-
 ```{r year-multi}
-year_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_residue", year)
+year_multi <- spec_dataset(dims_comb_data, dims, ana_threshold, "multi_residue", year) %>%
+  factor_dims(year)
 ```
+
+`r text_threshold(data = year_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year"))`
 
 (ref:year-multi) 各年份多残留指标
 
 ```{r year-multi-table, results="asis", dev='png'}
-sp_dable(year_multi, ref_text = "(ref:year-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_multi, ref_text = "(ref:year-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年蔬菜类产品年抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-multi-det-bar-line-eplot) 和图 \@ref(fig:year-multi-def-bar-line-eplot)。可以看出，`r year_range[1]` - `r year_range[2]` 年蔬菜类产品年抽检样本量在 `r text_range(year_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_multi, "max_defective_num")` 之间。
+
+```{r year-multi-det-bar-line-eplot, fig.cap="各年份多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot(
+  year_multi, x_var = "year", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r year-multi-def-bar-line-eplot, fig.cap="各年份多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot(
+  year_multi, x_var = "year", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
 ```
 
 ## 各季度多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-multi}
 quarter_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter
-)
+) %>%
+  factor_dims(quarter)
 ```
+
+`r text_threshold(data = quarter_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter"))`
 
 (ref:quarter-multi) 各季度多残留指标
 
 ```{r quarter-multi-table, results="asis", dev='png'}
-sp_dable(quarter_multi, ref_text = "(ref:quarter-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_multi, ref_text = "(ref:quarter-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-multi) 给出了蔬菜类产品各季度抽检样本量及多残留指标，其图形展示见图 \@ref(fig:quarter-multi-det-bar-line-eplot) 和图 \@ref(fig:quarter-multi-def-bar-line-eplot)。可以看出，蔬菜类产品各季度抽检样本量在 `r text_range(quarter_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_multi, "max_defective_num")` 之间。
+
+```{r quarter-multi-det-bar-line-eplot, fig.cap="各季度多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot(
+  quarter_multi, x_var = "quarter", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r quarter-multi-def-bar-line-eplot, fig.cap="各季度多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot(
+  quarter_multi, x_var = "quarter", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
 ```
 
 ## 各省份多残留风险
-
-&emsp;&emsp;
 
 ```{r province-multi}
 province_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   province
-)
+) %>%
+  factor_dims(province)
 ```
+
+`r text_threshold(data = province_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("province"))`
 
 (ref:province-multi) 各省份多残留指标
 
 ```{r province-multi-table, results="asis", dev='png'}
-sp_dable(province_multi, ref_text = "(ref:province-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(province_multi, ref_text = "(ref:province-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:province-multi) 给出了蔬菜类产品在 `r nrow(province)` 个省市自治区的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:province-multi-det-rate-emap) - 图 \@ref(fig:province-multi-def-num-emap)。可以看出，各省市自治区蔬菜类产品抽检样本量在 `r text_range(province_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(province_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(province_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(province_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(province_multi, "max_defective_num")` 之间。
+
+```{r province-multi-det-rate-emap, fig.cap="各省份多残留检出率地图"}
+emap(
+  province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_detection_rate_percent"
+)
+```
+
+```{r province-multi-det-num-emap, fig.cap="各省份最大多残留检出数地图"}
+emap(
+  province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE
+)
+```
+
+```{r province-multi-def-rate-emap, fig.cap="各省份多残留超标率地图"}
+emap(
+  province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_defective_rate_percent"
+)
+```
+
+```{r province-multi-def-num-emap, fig.cap="各省份最大多残留超标数地图"}
+emap(
+  province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE
+)
 ```
 
 ## 各蔬菜类别多残留风险
-
-&emsp;&emsp;
 
 ```{r category-multi}
 category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   category
-)
+) %>%
+  factor_dims(category)
 ```
+
+`r text_threshold(data = category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("category"))`
 
 (ref:category-multi) 各蔬菜类别多残留指标
 
 ```{r category-multi-table, results="asis", dev='png'}
-sp_dable(category_multi, ref_text = "(ref:category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(category_multi, ref_text = "(ref:category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:category-multi) 给出了 `r nrow(category)` 个蔬菜类别的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:category-multi-det-bar-line-eplot) - 图 \@ref(fig:category-multi-num-scatter-eplot)。可以看出，各蔬菜类别抽检样本量在 `r text_range(category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(category_multi, "max_defective_num")` 之间。
+
+```{r category-multi-det-bar-line-eplot, fig.cap="各蔬菜类别多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot(
+  category_multi, x_var = "category", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r category-multi-det-rose-eplot, fig.cap="各蔬菜类别多残留检出率与最大多残留检出数玫瑰图"}
+category_multi |> 
+  e_charts(category) |> 
+  e_pie(multi_detection_rate_percent, name = "多残留检出率（%）", roseType = "radius", center = c("25%", "50%"), radius = "45%") |> 
+  e_pie(max_detection_num, name = "最大多残留检出数", roseType = "radius", center = c("75%", "50%"), radius = "45%") |> 
+  e_tooltip(trigger = "item")
+```
+
+```{r category-multi-def-bar-line-eplot, fig.cap="各蔬菜类别多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot(
+  category_multi, x_var = "category", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r category-multi-def-rose-eplot, fig.cap="各蔬菜类别多残留超标率与最大多残留超标数玫瑰图"}
+category_multi |> 
+  e_charts(category) |> 
+  e_pie(multi_defective_rate_percent, name = "多残留超标率（%）", roseType = "radius", center = c("25%", "50%"), radius = "45%") |> 
+  e_pie(max_defective_num, name = "最大多残留超标数", roseType = "radius", center = c("75%", "50%"), radius = "45%") |> 
+  e_tooltip(trigger = "item")
+```
+
+```{r category-multi-det-scatter-eplot, fig.cap="各蔬菜类别多残留检出率与最大多残留检出数散点图"}
+scatter_eplot(
+  category_multi, 
+  x_var = "max_detection_num", y_var = "multi_detection_rate_percent", label_var = "category",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r category-multi-def-scatter-eplot, fig.cap="各蔬菜类别多残留超标率与最大多残留超标数散点图"}
+scatter_eplot(
+  category_multi, 
+  x_var = "max_defective_num", y_var = "multi_defective_rate_percent", label_var = "category",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r category-multi-rate-scatter-eplot, fig.cap="各蔬菜类别多残留检出率与多残留超标率散点图"}
+scatter_eplot(
+  category_multi, 
+  x_var = "multi_defective_rate_percent", y_var = "multi_detection_rate_percent", label_var = "category",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r category-multi-num-scatter-eplot, fig.cap="各蔬菜类别最大多残留检出数与最大多残留超标数散点图"}
+scatter_eplot(
+  category_multi, 
+  x_var = "max_defective_num", y_var = "max_detection_num", label_var = "category",
+  increment = 1, shrink_width = "70%"
+)
 ```
 
 ## 各品种多残留风险
-
-&emsp;&emsp;
 
 ```{r product-multi}
 product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   product
-)
+) %>%
+  factor_dims(product)
 ```
+
+`r text_threshold(data = product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("product"))`
 
 (ref:product-multi) 各品种多残留指标
 
 ```{r product-multi-table, results="asis", dev='png'}
-sp_dable(product_multi, ref_text = "(ref:product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(product_multi, ref_text = "(ref:product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:product-multi) 给出了 `r nrow(product)` 个蔬菜品种的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:product-multi-det-rose-eplot) - 图 \@ref(fig:product-multi-num-scatter-eplot)。可以看出，各蔬菜品种抽检样本量在 `r text_range(product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(product_multi, "max_defective_num")` 之间。
+
+
+&emsp;&emsp;就多残留检出情况而言，芹菜的多残留检出率最高为 51.8%，其次是辣椒和长豇豆，其多残留检出率分别为 44.67% 和 41.43%，而洋葱的多残留检出率最低为 0.94%；菠菜、叶用莴苣和长豇豆的最大多残留检出数最高为 15，金针菇、马铃薯和秀珍菇的最大多残留检出数最低为 4。另外，从图 \@ref(fig:product-multi-det-scatter-eplot) 可以看出，芹菜和长豇豆的多残留检出率与最大多残留检出数均较高。
+
+```{r product-multi-det-rose-eplot, fig.cap="各品种多残留检出率与最大多残留检出数玫瑰图"}
+product_multi |> 
+  e_charts(product) |> 
+  e_pie(multi_detection_rate_percent, name = "多残留检出率（%）", roseType = "radius", center = c("25%", "50%"), radius = "45%") |> 
+  e_pie(max_detection_num, name = "最大多残留检出数", roseType = "radius", center = c("75%", "50%"), radius = "45%") |> 
+  e_tooltip(trigger = "item")
+```
+
+```{r product-multi-det-scatter-eplot, fig.cap="各品种多残留检出率与最大多残留检出数散点图"}
+scatter_eplot(
+  product_multi, 
+  x_var = "max_detection_num", y_var = "multi_detection_rate_percent", label_var = "product",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r product-multi-def-rose-eplot, fig.cap="各品种多残留超标率与最大多残留超标数玫瑰图"}
+product_multi |> 
+  e_charts(product) |> 
+  e_pie(multi_defective_rate_percent, name = "多残留超标率（%）", roseType = "radius", center = c("25%", "50%"), radius = "45%") |> 
+  e_pie(max_defective_num, name = "最大多残留超标数", roseType = "radius", center = c("75%", "50%"), radius = "45%") |> 
+  e_tooltip(trigger = "item")
+```
+
+```{r product-multi-def-scatter-eplot, fig.cap="各品种多残留超标率与最大多残留超标数散点图"}
+scatter_eplot(
+  product_multi, 
+  x_var = "max_defective_num", y_var = "multi_defective_rate_percent", label_var = "product",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r product-multi-rate-scatter-eplot, fig.cap="各品种多残留检出率与多残留超标率散点图"}
+scatter_eplot(
+  product_multi, 
+  x_var = "multi_defective_rate_percent", y_var = "multi_detection_rate_percent", label_var = "product",
+  increment = 1, shrink_width = "70%"
+)
+```
+
+```{r product-multi-num-scatter-eplot, fig.cap="各品种最大多残留检出数与最大多残留超标数散点图"}
+scatter_eplot(
+  product_multi, 
+  x_var = "max_defective_num", y_var = "max_detection_num", label_var = "product",
+  increment = 1, shrink_width = "70%"
+)
 ```
 
 ## “年份-季度”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-quarter-multi}
 year_quarter_multi <- spec_dataset(
@@ -121,169 +297,453 @@ year_quarter_multi <- spec_dataset(
 )
 ```
 
+`r text_threshold(data = year_quarter_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "quarter"))`
+
 (ref:year-quarter-multi) 各年份各季度多残留指标
 
 ```{r year-quarter-multi-table, results="asis", dev='png'}
-sp_dable(year_quarter_multi, ref_text = "(ref:year-quarter-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_quarter_multi %>% factor_dims(year, quarter), ref_text = "(ref:year-quarter-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-quarter-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年每年四个季度的蔬菜类产品的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-quarter-multi-det-bar-line-eplot) 和图 \@ref(fig:year-quarter-multi-def-bar-line-eplot)。可以看出，各蔬菜品种抽检样本量在 `r text_range(year_quarter_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_quarter_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_quarter_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_quarter_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_quarter_multi, "max_defective_num")` 之间。
+
+```{r year-quarter-multi-det-bar-line-eplot, fig.cap="各年份各季度最大多残留检出数柱状图与多残留检出率折线图"}
+bar_line_eplot(
+  year_quarter_multi %>% combine_year_quarter(), 
+  x_var = "timeline", bar_var = "max_detection_num", line_var = "multi_detection_rate_percent",
+  use_y_upper_bound = TRUE,
+  x_axis_name = "时间", x_name_gap = 40,
+  long_x_label = TRUE, x_label_width = 30
+) |> e_labels(fontWeight = "bold", fontSize = 11)
+```
+
+```{r year-quarter-multi-def-bar-line-eplot, fig.cap="各年份各季度最大多残留超标数柱状图与多残留超标率折线图"}
+bar_line_eplot(
+  year_quarter_multi %>% combine_year_quarter(), 
+  x_var = "timeline", bar_var = "max_defective_num", line_var = "multi_defective_rate_percent",
+  use_y_upper_bound = TRUE,
+  x_axis_name = "时间", x_name_gap = 40,
+  long_x_label = TRUE, x_label_width = 30
+) |> e_labels(fontWeight = "bold", fontSize = 11)
 ```
 
 ## “年份-省份”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-province-multi}
 year_province_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, province
-)
+) %>%
+  factor_dims(year, province)
 ```
+
+`r text_threshold(data = year_province_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "province"))`
 
 (ref:year-province-multi) 各年份各省份多残留指标
 
 ```{r year-province-multi-table, results="asis", dev='png'}
-sp_dable(year_province_multi, ref_text = "(ref:year-province-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_province_multi, ref_text = "(ref:year-province-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-province-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年 `r nrow(province)` 个省市自治区的蔬菜类产品的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-province-multi-det-rate-emap) 和图 \@ref(fig:year-province-multi-def-num-emap)。可以看出，各年份各省市自治区的抽检样本量在 `r text_range(year_province_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_province_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_province_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_province_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_province_multi, "max_defective_num")` 之间。
+
+```{r year-province-multi-det-rate-emap, fig.cap="各年份各省份多残留检出率地图"}
+emap(
+  year_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_detection_rate_percent", timeline_var = "year"
+)
+```
+
+```{r year-province-multi-det-num-emap, fig.cap="各年份各省份最大多残留检出数地图"}
+emap(
+  year_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "year"
+)
+```
+
+```{r year-province-multi-def-rate-emap, fig.cap="各年份各省份多残留超标率地图"}
+emap(
+  year_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_defective_rate_percent", timeline_var = "year"
+)
+```
+
+```{r year-province-multi-def-num-emap, fig.cap="各年份各省份最大多残留超标数地图"}
+emap(
+  year_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "year"
+)
 ```
 
 ## “年份-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-category-multi}
 year_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, category
-)
+) %>%
+  factor_dims(year, category)
 ```
+
+`r text_threshold(data = year_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "category"))`
 
 (ref:year-category-multi) 各年份各蔬菜类别多残留指标
 
 ```{r year-category-multi-table, results="asis", dev='png'}
-sp_dable(year_category_multi, ref_text = "(ref:year-category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_category_multi, ref_text = "(ref:year-category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-category-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年 `r nrow(category)` 个蔬菜类别的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-category-multi-det-bar-line-eplot) - 图 \@ref(fig:year-category-multi-num-scatter-eplot)。可以看出，各年份各蔬菜类别的抽检样本量在 `r text_range(year_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_category_multi, "max_defective_num")` 之间。
+
+```{r year-category-multi-det-bar-line-eplot, fig.cap="各年份各蔬菜类别多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot_timeline(
+  year_category_multi, timeline_var = "year", x_var = "category", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r year-category-multi-def-bar-line-eplot, fig.cap="各年份各蔬菜类别多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot_timeline(
+  year_category_multi, timeline_var = "year", x_var = "category", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r year-category-multi-det-scatter-eplot, fig.cap="各年份各蔬菜类别多残留检出率与最大多残留检出数散点图"}
+scatter_eplot_timeline(
+  year_category_multi, timeline_var = "year",
+  x_var = "category", y_var = "multi_detection_rate_percent", size_var = "max_detection_num"
+)
+```
+
+```{r year-category-multi-def-scatter-eplot, fig.cap="各年份各蔬菜类别多残留超标率与最大多残留超标数散点图"}
+scatter_eplot_timeline(
+  year_category_multi, timeline_var = "year",
+  x_var = "category", y_var = "multi_defective_rate_percent", size_var = "max_defective_num"
+)
+```
+
+```{r year-category-multi-rate-scatter-eplot, fig.cap="各蔬菜类别各年份多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot_timeline(
+  year_category_multi, timeline_var = "category", x_var = "year", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
+```
+
+```{r year-category-multi-num-scatter-eplot, fig.cap="各蔬菜类别各年份多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot_timeline(
+  year_category_multi, timeline_var = "category", x_var = "year", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
 ```
 
 ## “年份-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-product-multi}
 year_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, product
-)
+) %>%
+  factor_dims(year, product)
 ```
+
+`r text_threshold(data = year_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "product"))`
 
 (ref:year-product-multi) 各年份各品种多残留指标
 
 ```{r year-product-multi-table, results="asis", dev='png'}
-sp_dable(year_product_multi, ref_text = "(ref:year-product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_product_multi, ref_text = "(ref:year-product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-product-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年 `r nrow(product)` 个蔬菜品种的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-product-multi-det-scatter-eplot) 和图 \@ref(fig:year-product-multi-def-scatter-eplot)。可以看出，各年份各蔬菜品种的抽检样本量在 `r text_range(year_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_product_multi, "max_defective_num")` 之间。
+
+```{r year-product-multi-det-scatter-eplot, fig.cap="各年份各品种多残留检出率与最大多残留检出数散点图"}
+scatter_eplot_timeline(
+  year_product_multi, timeline_var = "year", 
+  x_var = "product", y_var = "multi_detection_rate_percent", size_var = "max_detection_num",
+  x_label_width = 1
+)
+```
+
+```{r year-product-multi-def-scatter-eplot, fig.cap="各年份各品种多残留超标率与最大多残留超标数散点图"}
+scatter_eplot_timeline(
+  year_product_multi, timeline_var = "year", 
+  x_var = "product", y_var = "multi_defective_rate_percent", size_var = "max_defective_num",
+  x_label_width = 1
+)
 ```
 
 ## “季度-省份”多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-province-multi}
 quarter_province_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter, province
-)
+) %>%
+  factor_dims(quarter, province)
 ```
+
+`r text_threshold(data = quarter_province_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter", "province"))`
 
 (ref:quarter-province-multi) 各季度各省份多残留指标
 
 ```{r quarter-province-multi-table, results="asis", dev='png'}
-sp_dable(quarter_province_multi, ref_text = "(ref:quarter-province-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_province_multi, ref_text = "(ref:quarter-province-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-province-multi) 给出了 `r nrow(province)` 个省市自治区在四个季度的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:quarter-province-multi-det-rate-emap) - 图 \@ref(fig:quarter-province-multi-def-num-emap)。可以看出，各季度各省份的抽检样本量在 `r text_range(quarter_province_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_province_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_province_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_province_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_province_multi, "max_defective_num")` 之间。
+
+```{r quarter-province-multi-det-rate-emap, fig.cap="各季度各省份多残留检出率地图"}
+emap(
+  quarter_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_detection_rate_percent", timeline_var = "quarter"
+)
+```
+
+```{r quarter-province-multi-det-num-emap, fig.cap="各季度各省份最大多残留检出数地图"}
+emap(
+  quarter_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "quarter"
+)
+```
+
+```{r quarter-province-multi-def-rate-emap, fig.cap="各季度各省份多残留超标率地图"}
+emap(
+  quarter_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "multi_defective_rate_percent", timeline_var = "quarter"
+)
+```
+
+```{r quarter-province-multi-def-num-emap, fig.cap="各季度各省份最大多残留超标数地图"}
+emap(
+  quarter_province_multi %>% shorten_province_name(), map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "quarter"
+)
 ```
 
 ## “季度-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-category-multi}
 quarter_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter, category
-)
+) %>%
+  factor_dims(quarter, category)
 ```
+
+`r text_threshold(data = quarter_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter", "category"))`
 
 (ref:quarter-category-multi) 各季度各蔬菜类别多残留指标
 
 ```{r quarter-category-multi-table, results="asis", dev='png'}
-sp_dable(quarter_category_multi, ref_text = "(ref:quarter-category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_category_multi, ref_text = "(ref:quarter-category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-category-multi) 给出了 `r nrow(category)` 个蔬菜类别在四个季度的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:quarter-category-multi-det-bar-line-eplot) - 图 \@ref(fig:quarter-category-multi-num-scatter-eplot)。可以看出，各季度各蔬菜类别的抽检样本量在 `r text_range(quarter_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_category_multi, "max_defective_num")` 之间。
+
+```{r quarter-category-multi-det-bar-line-eplot, fig.cap="各季度各蔬菜类别多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot_timeline(
+  quarter_category_multi, timeline_var = "quarter", x_var = "category", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r quarter-category-multi-def-bar-line-eplot, fig.cap="各季度各蔬菜类别多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot_timeline(
+  quarter_category_multi, timeline_var = "quarter", x_var = "category", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r quarter-category-multi-det-scatter-eplot, fig.cap="各季度各蔬菜类别多残留检出率与最大多残留检出数散点图"}
+scatter_eplot_timeline(
+  quarter_category_multi, timeline_var = "quarter",
+  x_var = "category", y_var = "multi_detection_rate_percent", size_var = "max_detection_num"
+)
+```
+
+```{r quarter-category-multi-def-scatter-eplot, fig.cap="各季度各蔬菜类别多残留超标率与最大多残留超标数散点图"}
+scatter_eplot_timeline(
+  quarter_category_multi, timeline_var = "quarter",
+  x_var = "category", y_var = "multi_defective_rate_percent", size_var = "max_defective_num"
+)
+```
+
+```{r quarter-category-multi-rate-scatter-eplot, fig.cap="各蔬菜类别各季度多残留检出率折线图与最大多残留检出数散点图"}
+bar_line_eplot_timeline(
+  quarter_category_multi, timeline_var = "category", x_var = "quarter", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
+```
+
+```{r quarter-category-multi-num-scatter-eplot, fig.cap="各蔬菜类别各季度多残留超标率折线图与最大多残留超标数散点图"}
+bar_line_eplot_timeline(
+  quarter_category_multi, timeline_var = "category", x_var = "quarter", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
 ```
 
 ## “季度-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-product-multi}
 quarter_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter, product
-)
+) %>%
+  factor_dims(quarter, product)
 ```
+
+`r text_threshold(data = quarter_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter", "product"))`
 
 (ref:quarter-product-multi) 各季度各品种多残留指标
 
 ```{r quarter-product-multi-table, results="asis", dev='png'}
-sp_dable(quarter_product_multi, ref_text = "(ref:quarter-product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_product_multi, ref_text = "(ref:quarter-product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-product-multi) 给出了 `r nrow(product)` 个蔬菜品种在四个季度的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:quarter-product-multi-det-bar-line-eplot) 和图 \@ref(fig:quarter-product-multi-def-bar-line-eplot)。可以看出，各季度各蔬菜品种的抽检样本量在 `r text_range(quarter_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_product_multi, "max_defective_num")` 之间。
+
+```{r quarter-product-multi-det-bar-line-eplot, fig.cap="各季度各品种多残留检出率与最大多残留检出数散点图"}
+scatter_eplot_timeline(
+  quarter_product_multi, timeline_var = "quarter", 
+  x_var = "product", y_var = "multi_detection_rate_percent", size_var = "max_detection_num",
+  x_label_width = 1
+)
+```
+
+```{r quarter-product-multi-def-bar-line-eplot, fig.cap="各季度各品种多残留超标率与最大多残留超标数散点图"}
+scatter_eplot_timeline(
+  quarter_product_multi, timeline_var = "quarter", 
+  x_var = "product", y_var = "multi_defective_rate_percent", size_var = "max_defective_num",
+  x_label_width = 1
+)
 ```
 
 ## “省份-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r province-category-multi}
 province_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   province, category
-)
+) %>%
+  factor_dims(province, category)
 ```
+
+`r text_threshold(data = province_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("province", "category"))`
 
 (ref:province-category-multi) 各省份各蔬菜类别多残留指标
 
 ```{r province-category-multi-table, results="asis", dev='png'}
-sp_dable(province_category_multi, ref_text = "(ref:province-category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(province_category_multi, ref_text = "(ref:province-category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:province-category-multi) 给出了 `r nrow(province)` 个省市自治区的 `r nrow(category)` 个蔬菜类别的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:province-category-multi-det-rate-emap) - 图 \@ref(fig:province-category-multi-def-num-emap)。可以看出，各省市自治区各蔬菜类别的抽检样本量在 `r text_range(province_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(province_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(province_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(province_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(province_category_multi, "max_defective_num")` 之间。
+
+```{r province-category-multi-det-rate-emap, fig.cap="各省份各蔬菜类别多残留检出率地图"}
+emap(
+  province_category_multi %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  timeline_var = "category", value_var = "multi_detection_rate_percent"
+) |> e_timeline_opts(controlStyle = list(showPlayBtn = FALSE))
+```
+
+```{r province-category-multi-det-num-emap, fig.cap="各省份各蔬菜类别最大多残留检出数地图"}
+emap(
+  province_category_multi %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  timeline_var = "category", value_var = "max_detection_num"
+) |> e_timeline_opts(controlStyle = list(showPlayBtn = FALSE))
+```
+
+```{r province-category-multi-def-rate-emap, fig.cap="各省份各蔬菜类别多残留超标率地图"}
+emap(
+  province_category_multi %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  timeline_var = "category", value_var = "multi_defective_rate_percent"
+) |> e_timeline_opts(controlStyle = list(showPlayBtn = FALSE))
+```
+
+```{r province-category-multi-def-num-emap, fig.cap="各省份各蔬菜类别最大多残留超标数地图"}
+emap(
+  province_category_multi %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  timeline_var = "category", value_var = "max_defective_num"
+) |> e_timeline_opts(controlStyle = list(showPlayBtn = FALSE))
 ```
 
 ## “省份-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r province-product-multi}
 province_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   province, product
-)
+) %>%
+  factor_dims(province, product)
 ```
+
+`r text_threshold(data = province_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("province", "product"))`
 
 (ref:province-product-multi) 各省份各品种多残留指标
 
 ```{r province-product-multi-table, results="asis", dev='png'}
-sp_dable(province_product_multi, ref_text = "(ref:province-product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(province_product_multi, ref_text = "(ref:province-product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:province-product-multi) 给出了 `r nrow(province)` 个省市自治区的 `r nrow(product)` 个蔬菜品种的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:province-product-multi-det-rate-eheatmap) - 图 \@ref(fig:province-product-multi-def-num-eheatmap)。可以看出，各省市自治区各蔬菜品种的抽检样本量在 `r text_range(province_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(province_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(province_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(province_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(province_product_multi, "max_defective_num")` 之间。
+
+```{r province-product-multi-det-rate-eheatmap, fig.cap="各省份各品种多残留检出率热力图"}
+heatmap(
+  province_product_multi %>% shorten_province_name(), 
+  x_var = "product", y_var = "province", value_var = "multi_detection_rate_percent"
+)
+```
+
+```{r province-product-multi-det-num-eheatmap, fig.cap="各省份各品种最大多残留检出数热力图"}
+heatmap(
+  province_product_multi %>% shorten_province_name(), 
+  x_var = "product", y_var = "province", value_var = "max_detection_num"
+)
+```
+
+```{r province-product-multi-def-rate-eheatmap, fig.cap="各省份各品种多残留超标率热力图"}
+heatmap(
+  province_product_multi %>% shorten_province_name(), 
+  x_var = "product", y_var = "province", value_var = "multi_defective_rate_percent"
+)
+```
+
+```{r province-product-multi-def-num-eheatmap, fig.cap="各省份各品种最大多残留超标数热力图"}
+heatmap(
+  province_product_multi %>% shorten_province_name(), 
+  x_var = "product", y_var = "province", value_var = "max_defective_num"
+)
 ```
 
 ## “年份-季度-省份”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-quarter-province-multi}
 year_quarter_province_multi <- spec_dataset(
@@ -292,17 +752,100 @@ year_quarter_province_multi <- spec_dataset(
 )
 ```
 
+`r text_threshold(data = year_quarter_province_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "quarter", "province"))`
+
 (ref:year-quarter-province-multi) 各年份各季度各省份多残留指标
 
 ```{r year-quarter-province-multi-table, results="asis", dev='png'}
-sp_dable(year_quarter_province_multi, ref_text = "(ref:year-quarter-province-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(
+  year_quarter_province_multi %>% factor_dims(year, quarter, province), 
+  ref_text = "(ref:year-quarter-province-multi)"
+)
+```
+
+&emsp;&emsp;表 \@ref(tab:year-quarter-province-multi) 给出了 `r year_range[1]` 年第一季度到 `r year_range[2]` 年第四季度 `r nrow(province)` 个省市自治区的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:province-product-multi-det-rate-eheatmap) - 图 \@ref(fig:year-quarter-province-multi-def-num-eheatmap)。可以看出，各年份各季度各省市自治区的抽检样本量在 `r text_range(year_quarter_province_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_quarter_province_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_quarter_province_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_quarter_province_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_quarter_province_multi, "max_defective_num")` 之间。
+
+```{r year-quarter-province-multi-det-rate-emap, fig.cap="各年份各季度各省份多残留检出率地图"}
+emap(
+  year_quarter_province_multi %>% combine_year_quarter() %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  value_var = "multi_detection_rate_percent", timeline_var = "timeline",
+  interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-province-multi-det-rate-eheatmap, fig.cap="各年份各季度各省份多残留检出率热力图"}
+heatmap(
+  year_quarter_province_multi %>% 
+    combine_year_quarter() %>% 
+    shorten_province_name() %>%
+    factor_dims(timeline, province), 
+  x_var = "province", y_var = "timeline", value_var = "multi_detection_rate_percent",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-province-multi-det-num-emap, fig.cap="各年份各季度各省份最大多残留检出数地图"}
+emap(
+  year_quarter_province_multi %>% combine_year_quarter() %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "timeline",
+  interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-province-multi-det-num-eheatmap, fig.cap="各年份各季度各省份最大多残留检出数热力图"}
+heatmap(
+  year_quarter_province_multi %>% 
+    combine_year_quarter() %>% 
+    shorten_province_name() %>%
+    factor_dims(timeline, province), 
+  x_var = "province", y_var = "timeline", value_var = "max_detection_num",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-province-multi-def-rate-emap, fig.cap="各年份各季度各省份多残留超标率地图"}
+emap(
+  year_quarter_province_multi %>% combine_year_quarter() %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  value_var = "multi_defective_rate_percent", timeline_var = "timeline",
+  interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-province-multi-def-rate-eheatmap, fig.cap="各年份各季度各省份多残留超标率热力图"}
+heatmap(
+  year_quarter_province_multi %>% 
+    combine_year_quarter() %>% 
+    shorten_province_name() %>%
+    factor_dims(timeline, province), 
+  x_var = "province", y_var = "timeline", value_var = "multi_defective_rate_percent",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-province-multi-def-num-emap, fig.cap="各年份各季度各省份最大多残留超标数地图"}
+emap(
+  year_quarter_province_multi %>% combine_year_quarter() %>% shorten_province_name(), 
+  map_json = cn_province_map_json,
+  value_var = "max_detection_num", use_digits = FALSE, timeline_var = "timeline",
+  interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-province-multi-def-num-eheatmap, fig.cap="各年份各季度各省份最大多残留超标数热力图"}
+heatmap(
+  year_quarter_province_multi %>% 
+    combine_year_quarter() %>% 
+    shorten_province_name() %>%
+    factor_dims(timeline, province), 
+  x_var = "province", y_var = "timeline", value_var = "max_detection_num",
+  y_axis_name = "年份-季度"
+)
 ```
 
 ## “年份-季度-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-quarter-category-multi}
 year_quarter_category_multi <- spec_dataset(
@@ -311,143 +854,828 @@ year_quarter_category_multi <- spec_dataset(
 )
 ```
 
+`r text_threshold(data = year_quarter_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "quarter", "category"))`
+
 (ref:year-quarter-category-multi) 各年份各季度各蔬菜类别多残留指标
 
 ```{r year-quarter-category-multi-table, results="asis", dev='png'}
-sp_dable(year_quarter_category_multi, ref_text = "(ref:year-quarter-category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(
+  year_quarter_category_multi %>% factor_dims(year, quarter, category), 
+  ref_text = "(ref:year-quarter-category-multi)"
+)
+```
+
+&emsp;&emsp;表 \@ref(tab:year-quarter-category-multi) 给出了 `r year_range[1]` 年第一季度到 `r year_range[2]` 年第四季度 `r nrow(category)` 个蔬菜类别的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-quarter-category-multi-det-bar-line-eplot) - 图 \@ref(fig:year-quarter-category-multi-num-scatter-eplot)。可以看出，各年份各季度各蔬菜类别的抽检样本量在 `r text_range(year_quarter_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_quarter_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_quarter_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_quarter_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_quarter_category_multi, "max_defective_num")` 之间。
+
+```{r year-quarter-category-multi-det-bar-line-eplot, fig.cap="各年份各季度各蔬菜类别多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category), 
+  timeline_var = "timeline", x_var = "category", 
+  bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r year-quarter-category-multi-def-bar-line-eplot, fig.cap="各年份各季度各蔬菜类别多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category), 
+  timeline_var = "timeline", x_var = "category", 
+  bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  use_y_upper_bound = TRUE
+)
+```
+
+```{r year-quarter-category-multi-det-scatter-eplot, fig.cap="各年份各季度各蔬菜类别多残留检出率与最大多残留检出数散点图"}
+scatter_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category), 
+  timeline_var = "timeline",
+  x_var = "category", y_var = "multi_detection_rate_percent", size_var = "max_detection_num",
+  symbol_size = c(1,50), interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-category-multi-def-scatter-eplot, fig.cap="各年份各季度各蔬菜类别多残留超标率与最大多残留超标数散点图"}
+scatter_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category),
+  timeline_var = "timeline",
+  x_var = "category", y_var = "multi_defective_rate_percent", size_var = "max_defective_num",
+  symbol_size = c(1,50), interval = 3, timeline_label_width = 60
+)
+```
+
+```{r year-quarter-category-multi-rate-scatter-eplot, fig.cap="各蔬菜类别各年份各季度多残留检出率折线图与最大多残留检出数柱状图"}
+bar_line_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category),
+  timeline_var = "category", 
+  x_var = "timeline", bar_var = "max_detection_num", line_var = "multi_detection_rate_percent", 
+  x_axis_name = "年份-季度", use_y_upper_bound = TRUE,
+  long_x_label = TRUE, x_label_width = 30
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
+```
+
+```{r year-quarter-category-multi-num-scatter-eplot, fig.cap="各蔬菜类别各年份各季度多残留超标率折线图与最大多残留超标数柱状图"}
+bar_line_eplot_timeline(
+  year_quarter_category_multi %>% combine_year_quarter() %>% factor_dims(timeline, category),
+  timeline_var = "category", 
+  x_var = "timeline", bar_var = "max_defective_num", line_var = "multi_defective_rate_percent", 
+  x_axis_name = "年份-季度", use_y_upper_bound = TRUE,
+  long_x_label = TRUE, x_label_width = 30
+) |>
+  e_timeline_opts(
+    label = list(interval = 0, width = 50, overflow = "break"),
+    padding = 0
+  )
 ```
 
 ## “年份-季度-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-quarter-product-multi}
 year_quarter_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, quarter, product
-)
+) 
 ```
+
+`r text_threshold(data = year_quarter_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "quarter", "product"))`
 
 (ref:year-quarter-product-multi) 各年份各季度各品种多残留指标
 
 ```{r year-quarter-product-multi-table, results="asis", dev='png'}
-sp_dable(year_quarter_product_multi, ref_text = "(ref:year-quarter-product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(
+  year_quarter_product_multi %>% factor_dims(year, quarter, product), 
+  ref_text = "(ref:year-quarter-product-multi)"
+)
+```
+
+&emsp;&emsp;表 \@ref(tab:year-quarter-product-multi) 给出了 `r year_range[1]` 年第一季度到 `r year_range[2]` 年第四季度 `r nrow(product)` 个蔬菜品种的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:year-quarter-product-multi-det-rate-eheatmap) - 图 \@ref(fig:year-quarter-product-multi-def-num-eheatmap)。可以看出，各年份各季度各蔬菜品种的抽检样本量在 `r text_range(year_quarter_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_quarter_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_quarter_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_quarter_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_quarter_product_multi, "max_defective_num")` 之间。
+
+```{r year-quarter-product-multi-det-rate-eheatmap, fig.cap="各年份各季度各品种多残留检出率热力图"}
+heatmap(
+  year_quarter_product_multi %>% combine_year_quarter() %>% factor_dims(product),
+  x_var = "product", y_var = "timeline", value_var = "multi_detection_rate_percent",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-product-multi-det-num-eheatmap, fig.cap="各年份各季度各品种最大多残留检出数热力图"}
+heatmap(
+  year_quarter_product_multi %>% combine_year_quarter() %>% factor_dims(product),
+  x_var = "product", y_var = "timeline", value_var = "max_detection_num",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-product-multi-def-rate-eheatmap, fig.cap="各年份各季度各品种多残留超标率热力图"}
+heatmap(
+  year_quarter_product_multi %>% combine_year_quarter() %>% factor_dims(product),
+  x_var = "product", y_var = "timeline", value_var = "multi_defective_rate_percent",
+  y_axis_name = "年份-季度"
+)
+```
+
+```{r year-quarter-product-multi-def-num-eheatmap, fig.cap="各年份各季度各品种最大多残留检超标数热力图"}
+heatmap(
+  year_quarter_product_multi %>% combine_year_quarter() %>% factor_dims(product),
+  x_var = "product", y_var = "timeline", value_var = "max_defective_num",
+  y_axis_name = "年份-季度"
+)
 ```
 
 ## “年份-省份-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-province-category-multi}
 year_province_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, province, category
-)
+) %>% 
+  factor_dims(year, province, category)
 ```
+
+`r text_threshold(data = year_province_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "province", "category"))`
 
 (ref:year-province-category-multi) 各年份各省份各蔬菜类别多残留指标
 
 ```{r year-province-category-multi-table, results="asis", dev='png'}
-sp_dable(year_province_category_multi, ref_text = "(ref:year-province-category-multi)") %>%
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_province_category_multi, ref_text = "(ref:year-province-category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-province-category-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年 `r nrow(province)` 个省市自治区的 `r nrow(category)` 个蔬菜类别的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:2016-province-category-multi-det-rate-eheatmap) - 图 \@ref(fig:2020-province-category-multi-def-num-eheatmap)。可以看出，各年份各省市自治区各蔬菜类别的抽检样本量在 `r text_range(year_province_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_province_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_province_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_province_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_province_category_multi, "max_defective_num")` 之间。
+
+```{r 2016-province-category-multi-det-rate-eheatmap, fig.cap="2016 年各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2016) %>% shorten_province_name(),
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2017-province-category-multi-det-rate-eheatmap, fig.cap="2017 年各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2018-province-category-multi-det-rate-eheatmap, fig.cap="2018 年各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2019-province-category-multi-det-rate-eheatmap, fig.cap="2019 年各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2020-province-category-multi-det-rate-eheatmap, fig.cap="2020 年各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2016-province-category-multi-det-num-eheatmap, fig.cap="2016 年各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2017-province-category-multi-det-num-eheatmap, fig.cap="2017 年各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2018-province-category-multi-det-num-eheatmap, fig.cap="2018 年各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2019-province-category-multi-det-num-eheatmap, fig.cap="2019 年各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2020-province-category-multi-det-num-eheatmap, fig.cap="2020 年各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2016-province-category-multi-def-rate-eheatmap, fig.cap="2016 年各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2017-province-category-multi-def-rate-eheatmap, fig.cap="2017 年各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2018-province-category-multi-def-rate-eheatmap, fig.cap="2018 年各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2019-province-category-multi-def-rate-eheatmap, fig.cap="2019 年各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2020-province-category-multi-def-rate-eheatmap, fig.cap="2020 年各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2016-province-category-multi-def-num-eheatmap, fig.cap="2016 年各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2017-province-category-multi-def-num-eheatmap, fig.cap="2017 年各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2018-province-category-multi-def-num-eheatmap, fig.cap="2018 年各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2019-province-category-multi-def-num-eheatmap, fig.cap="2019 年各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2020-province-category-multi-def-num-eheatmap, fig.cap="2020 年各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  year_province_category_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
 ```
 
 ## “年份-省份-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-province-product-multi}
 year_province_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, province, product
-)
+) %>% 
+  factor_dims(year, province, product)
 ```
+
+`r text_threshold(data = year_province_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "province", "product"))`
 
 (ref:year-province-product-multi) 各年份各省份各品种多残留指标
 
 ```{r year-province-product-multi-table, results="asis", dev='png'}
-sp_dable(year_province_product_multi, ref_text = "(ref:year-province-product-multi)") %>%
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_province_product_multi, ref_text = "(ref:year-province-product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:year-province-product-multi) 给出了 `r year_range[1]` - `r year_range[2]` 年 `r nrow(province)` 个省市自治区的 `r nrow(product)` 个蔬菜品种的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:2016-province-product-multi-det-rate-eheatmap) - 图 \@ref(fig:2020-province-product-multi-def-num-eheatmap)。可以看出，各年份各省市自治区各蔬菜品种的抽检样本量在 `r text_range(year_province_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_province_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_province_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_province_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_province_product_multi, "max_defective_num")` 之间。
+
+```{r 2016-province-product-multi-det-rate-eheatmap, fig.cap="2016 年各省份各蔬菜品种多残留检出率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2017-province-product-multi-det-rate-eheatmap, fig.cap="2017 年各省份各蔬菜品种多残留检出率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2018-province-product-multi-det-rate-eheatmap, fig.cap="2018 年各省份各蔬菜品种多残留检出率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2019-province-product-multi-det-rate-eheatmap, fig.cap="2019 年各省份各蔬菜品种多残留检出率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2020-province-product-multi-det-rate-eheatmap, fig.cap="2020 年各省份各蔬菜品种多残留检出率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2016-province-product-multi-det-num-eheatmap, fig.cap="2016 年各省份各蔬菜品种最大多残留检出数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2017-province-product-multi-det-num-eheatmap, fig.cap="2017 年各省份各蔬菜品种最大多残留检出数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2018-province-product-multi-det-num-eheatmap, fig.cap="2018 年各省份各蔬菜品种最大多残留检出数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2019-province-product-multi-det-num-eheatmap, fig.cap="2019 年各省份各蔬菜品种最大多残留检出数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2020-province-product-multi-det-num-eheatmap, fig.cap="2020 年各省份各蔬菜品种最大多残留检出数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r 2016-province-product-multi-def-rate-eheatmap, fig.cap="2016 年各省份各蔬菜品种多残留超标率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2017-province-product-multi-def-rate-eheatmap, fig.cap="2017 年各省份各蔬菜品种多残留超标率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2018-province-product-multi-def-rate-eheatmap, fig.cap="2018 年各省份各蔬菜品种多残留超标率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2019-province-product-multi-def-rate-eheatmap, fig.cap="2019 年各省份各蔬菜品种多残留超标率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2020-province-product-multi-def-rate-eheatmap, fig.cap="2020 年各省份各蔬菜品种多残留超标率热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r 2016-province-product-multi-def-num-eheatmap, fig.cap="2016 年各省份各蔬菜品种最大多残留超标数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2016) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2017-province-product-multi-def-num-eheatmap, fig.cap="2017 年各省份各蔬菜品种最大多残留超标数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2017) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2018-province-product-multi-def-num-eheatmap, fig.cap="2018 年各省份各蔬菜品种最大多残留超标数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2018) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2019-province-product-multi-def-num-eheatmap, fig.cap="2019 年各省份各蔬菜品种最大多残留超标数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2019) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r 2020-province-product-multi-def-num-eheatmap, fig.cap="2020 年各省份各蔬菜品种最大多残留超标数热力图"}
+heatmap(
+  year_province_product_multi %>% filter(year == 2020) %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
 ```
 
 ## “季度-省份-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-province-category-multi}
 quarter_province_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter, province, category
-)
+) %>%
+  factor_dims(quarter, province, category)
 ```
+
+`r text_threshold(data = quarter_province_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter", "province", "category"))`
 
 (ref:quarter-province-category-multi) 各季度各省份各蔬菜类别多残留指标
 
 ```{r quarter-province-category-multi-table, results="asis", dev='png'}
-sp_dable(quarter_province_category_multi, ref_text = "(ref:quarter-province-category-multi)") %>%
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_province_category_multi, ref_text = "(ref:quarter-province-category-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-province-category-multi) 给出了`r nrow(province)` 个省市自治区的 `r nrow(category)` 个蔬菜类别在四个季度的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:Q1-province-category-multi-det-rate-eheatmap) - 图 \@ref(fig:Q4-province-category-multi-def-num-eheatmap)，需要注意的是，豆类在各季度各省份的抽检样本量均低于阈值，不参与分析，因此图中只有其余 7 种蔬菜类别。可以看出，各季度各省市自治区各蔬菜类别的抽检样本量在 `r text_range(quarter_province_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_province_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_province_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_province_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_province_category_multi, "max_defective_num")` 之间。
+
+```{r Q1-province-category-multi-det-rate-eheatmap, fig.cap="第一季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q2-province-category-multi-det-rate-eheatmap, fig.cap="第二季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q3-province-category-multi-det-rate-eheatmap, fig.cap="第三季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q4-province-category-multi-det-rate-eheatmap, fig.cap="第四季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q1-province-category-multi-det-num-eheatmap, fig.cap="第一季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q2-province-category-multi-det-num-eheatmap, fig.cap="第二季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q3-province-category-multi-det-num-eheatmap, fig.cap="第三季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q4-province-category-multi-det-num-eheatmap, fig.cap="第四季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q1-province-category-multi-def-rate-eheatmap, fig.cap="第一季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q2-province-category-multi-def-rate-eheatmap, fig.cap="第二季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q3-province-category-multi-def-rate-eheatmap, fig.cap="第三季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q4-province-category-multi-def-rate-eheatmap, fig.cap="第四季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q1-province-category-multi-def-num-eheatmap, fig.cap="第一季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q2-province-category-multi-def-num-eheatmap, fig.cap="第二季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q3-province-category-multi-def-num-eheatmap, fig.cap="第三季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q4-province-category-multi-def-num-eheatmap, fig.cap="第四季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_category_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "category", value_var = "max_defective_num",
+  height = "300%"
+)
 ```
 
 ## “季度-省份-品种”多残留风险
-
-&emsp;&emsp;
 
 ```{r quarter-province-product-multi}
 quarter_province_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   quarter, province, product
-)
+) %>%
+  factor_dims(quarter, province, product)
 ```
+
+`r text_threshold(data = quarter_province_product_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("quarter", "province", "product"))`
 
 (ref:quarter-province-product-multi) 各季度各省份各品种多残留指标
 
 ```{r quarter-province-product-multi-table, results="asis", dev='png'}
-sp_dable(quarter_province_product_multi, ref_text = "(ref:quarter-province-product-multi)") %>%
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(quarter_province_product_multi, ref_text = "(ref:quarter-province-product-multi)")
+```
+
+&emsp;&emsp;表 \@ref(tab:quarter-province-product-multi) 给出了 `r nrow(province)` 个省市自治区的 `r nrow(product)` 个蔬菜品种在四个季度的抽检样本量及多残留指标，其图形展示见图 \@ref(fig:Q1-province-product-multi-det-rate-eheatmap) - 图 \@ref(fig:Q4-province-product-multi-def-num-eheatmap)。可以看出，各季度各省市自治区各蔬菜品种的抽检样本量在 `r text_range(quarter_province_product_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(quarter_province_product_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(quarter_province_product_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(quarter_province_product_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(quarter_province_product_multi, "max_defective_num")` 之间。
+
+```{r Q1-province-product-multi-det-rate-eheatmap, fig.cap="第一季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q2-province-product-multi-det-rate-eheatmap, fig.cap="第二季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q3-province-product-multi-det-rate-eheatmap, fig.cap="第三季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q4-province-product-multi-det-rate-eheatmap, fig.cap="第四季度各省份各蔬菜类别多残留检出率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_detection_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q1-province-product-multi-det-num-eheatmap, fig.cap="第一季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q2-province-product-multi-det-num-eheatmap, fig.cap="第二季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q3-province-product-multi-det-num-eheatmap, fig.cap="第三季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q4-province-product-multi-det-num-eheatmap, fig.cap="第四季度各省份各蔬菜类别最大多残留检出数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_detection_num",
+  height = "300%"
+)
+```
+
+```{r Q1-province-product-multi-def-rate-eheatmap, fig.cap="第一季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q2-province-product-multi-def-rate-eheatmap, fig.cap="第二季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q3-province-product-multi-def-rate-eheatmap, fig.cap="第三季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q4-province-product-multi-def-rate-eheatmap, fig.cap="第四季度各省份各蔬菜类别多残留超标率热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "multi_defective_rate_percent",
+  height = "300%"
+)
+```
+
+```{r Q1-province-product-multi-def-num-eheatmap, fig.cap="第一季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第一季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q2-province-product-multi-def-num-eheatmap, fig.cap="第二季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第二季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q3-province-product-multi-def-num-eheatmap, fig.cap="第三季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第三季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
+```
+
+```{r Q4-province-product-multi-def-num-eheatmap, fig.cap="第四季度各省份各蔬菜类别最大多残留超标数热力图"}
+heatmap(
+  quarter_province_product_multi %>% filter(quarter == "第四季度") %>% shorten_province_name(), 
+  x_var = "province", y_var = "product", value_var = "max_defective_num",
+  height = "300%"
+)
 ```
 
 ## “年份-季度-省份-蔬菜类别”多残留风险
-
-&emsp;&emsp;
 
 ```{r year-quarter-province-category-multi}
 year_quarter_province_category_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, quarter, province, category
-)
+) %>%
+  factor_dims(year, quarter, province, category)
 ```
+
+`r text_threshold(data = year_quarter_province_category_multi, threshold_data = ana_threshold, dims = dims, ana_dims = c("year", "quarter", "province", "category"))`
 
 (ref:year-quarter-province-category-multi) 各年份各季度各省份各蔬菜类别多残留指标
 
 ```{r year-quarter-province-category-multi-table, results="asis", dev='png'}
-sp_dable(year_quarter_province_category_multi, ref_text = "(ref:year-quarter-province-category-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_quarter_province_category_multi, ref_text = "(ref:year-quarter-province-category-multi)")
 ```
 
-## “年份-季度-省份-品种”多残留风险（不分析）
+&emsp;&emsp;表 \@ref(tab:year-quarter-province-category-multi) 给出了 `r year_range[1]` 年第一季度到 `r year_range[2]` 年第四季度 `r nrow(province)` 个省市自治区的 `r nrow(category)` 个蔬菜类别在四个季度的抽检样本量及多残留指标。可以看出，各年份各季度各省市自治区各蔬菜类别的抽检样本量在 `r text_range(year_quarter_province_category_multi, "sample_size")` 之间，多残留检出率稳定在 `r text_range(year_quarter_province_category_multi, "multi_detection_rate_percent")` 之间，最大多残留检出数稳定在 `r text_range(year_quarter_province_category_multi, "max_detection_num")` 之间，多残留超标率稳定在 `r text_range(year_quarter_province_category_multi, "multi_defective_rate_percent")` 之间，最大多残留超标数稳定在 `r text_range(year_quarter_province_category_multi, "max_defective_num")` 之间。
 
+`r if (FALSE) '
+## “年份-季度-省份-品种”多残留风险（不分析）
+'`
 &emsp;&emsp;
 
 ```{r year-quarter-province-product-multi, eval=FALSE}
 year_quarter_province_product_multi <- spec_dataset(
   dims_comb_data, dims, ana_threshold, "multi_residue", 
   year, quarter, province, product
-)
+) %>%
+  factor_dims(year, quarter, province, product)
 ```
 
 (ref:year-quarter-province-product-multi) 各年份各季度各省份各品种多残留指标
 
 ```{r year-quarter-province-product-multi-table, results="asis", dev='png', eval=FALSE}
-sp_dable(year_quarter_province_product_multi, ref_text = "(ref:year-quarter-province-product-multi)") %>% 
-  formatRound("multi_detection_rate_percenet", params$digits) %>% 
-  formatRound("multi_defective_rate_percenet", params$digits)
+sp_dable(year_quarter_province_product_multi, ref_text = "(ref:year-quarter-province-product-multi)")
 ```

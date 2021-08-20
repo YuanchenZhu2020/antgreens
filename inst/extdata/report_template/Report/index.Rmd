@@ -13,59 +13,59 @@ bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 # fontsize: 12pt
 link-citations: yes
-params:
-  # CRAN Mirror
-  cran_mirror: 
-    label: "CRAN Mirror"
-    value: "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
-  # dataset
-  raw_data:
-    label: "Raw Dataset"
-    value: "../Data/raw_data/vegetable_58_2016-2020.UTF-8.csv"
-    input: file
-  mrl_data:
-    label: "MRL Standard Dataset"
-    value: "../Data/raw_data/MRL_2020.xlsx"
-    input: file
-  products:
-    label: "Products Info Dataset"
-    value: "../Data/raw_data/products.xlsx"
-    input: file
-  pesticides:
-    label: "Pesticides Info Dataset"
-    value: "../Data/raw_data/pesticides.xlsx"
-    input: file
-  province:
-    label: "Province Chinese and English Name"
-    value: "../Data/raw_data/province.xlsx"
-    input: file
-  ana_threshold:
-    label: "Threshold of Each Dimensions' Combination"
-    value: "../Data/multi_dim_check.xlsx"
-    input: file
-  # code path
-  codes_dir: "../Codes"
-  
-  # all dims to be analysis
-  ana_dims_part: !r list(year = "年份", quarter = "季度", province = "省份", category = "产品类别")
-  ana_dims_product: "产品名称"
-  ana_dims_drug: "药物"
-  
-  # threshold keyword
-  threshold_kw: "阈值"
-  
-  # drug column
-  st_drug: "甲胺磷"
-  ed_drug: "二甲戊灵"
-  
-  # Cache setting
-  product_env: FALSE
-  
-  # digits of float number
-  digits: 2
-  
-  # en to zh-CN list
-  colname_map: !r list(category = "蔬菜类别", drug = "农药")
+# params:
+#   # CRAN Mirror
+#   cran_mirror: 
+#     label: "CRAN Mirror"
+#     value: "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
+#   # dataset
+#   raw_data:
+#     label: "Raw Dataset"
+#     value: "../Data/raw_data/vegetable_58_2016-2020.UTF-8.csv"
+#     input: file
+#   mrl_data:
+#     label: "MRL Standard Dataset"
+#     value: "../Data/raw_data/MRL_2020.xlsx"
+#     input: file
+#   products:
+#     label: "Products Info Dataset"
+#     value: "../Data/raw_data/products.xlsx"
+#     input: file
+#   pesticides:
+#     label: "Pesticides Info Dataset"
+#     value: "../Data/raw_data/pesticides.xlsx"
+#     input: file
+#   province:
+#     label: "Province Chinese and English Name"
+#     value: "../Data/raw_data/province.xlsx"
+#     input: file
+#   ana_threshold:
+#     label: "Threshold of Each Dimensions' Combination"
+#     value: "../Data/multi_dim_check.xlsx"
+#     input: file
+#   # code path
+#   codes_dir: "../Codes"
+#   
+#   # all dims to be analysis
+#   ana_dims_part: !r list(year = "年份", quarter = "季度", province = "省份", category = "产品类别")
+#   ana_dims_product: "产品名称"
+#   ana_dims_drug: "药物"
+#   
+#   # threshold keyword
+#   threshold_kw: "阈值"
+#   
+#   # drug column
+#   st_drug: "甲胺磷"
+#   ed_drug: "二甲戊灵"
+#   
+#   # Cache setting
+#   product_env: FALSE
+#   
+#   # digits of float number
+#   digits: 2
+#   
+#   # en to zh-CN list
+#   colname_map: !r list(category = "蔬菜类别", drug = "农药")
 ---
 
 ```{r setup, include=FALSE}
@@ -98,14 +98,18 @@ local({
 
 ##### install from CRAN mirrors #####
 lapply(
-  c('antgreens', 'knitr', 'tidyverse', 'RColorBrewer', 'data.table', 'readxl', 'Rcpp', 'rlang', 'webshot', 'DT', 'echarts4r'), 
+  c('antgreens', 'knitr', 'tidyverse', 'data.table', 'readxl', 'Rcpp', 'rlang', 'webshot', 'DT', 'echarts4r'), 
   function(pkg) {
     if (system.file(package = pkg) == '') install.packages(pkg)
   }
 )
 
 ##### install from github #####
-githubs <- c('citr' = 'crsh/citr')
+githubs <- c(
+  'citr' = 'crsh/citr', 
+  'echarts4r.assets' = 'JohnCoene/echarts4r.assets', 
+  'echarts4r.assets' = 'JohnCoene/echarts4r.maps'
+)
 lapply(names(githubs), function(pkg) {
   if (system.file(package = pkg) == '') remotes::install_github(githubs[pkg], upgrade = FALSE)
 })
@@ -114,7 +118,6 @@ lapply(names(githubs), function(pkg) {
 ```{r import_dependence, include=FALSE}
 library(antgreens)
 library(tidyverse)
-library(RColorBrewer)
 library(echarts4r)
 library(readxl)
 library(DT)
@@ -198,13 +201,11 @@ for (cf in code_files) {
 
 ## 确定维度及名称
 
-&emsp;&emsp;确定分析的所有维度，并为其中文名称指定英文变量名，放入列表中，例如：
+&emsp;&emsp;确定除了“具体产品”和“药品”之外需要分析的所有维度，并为其中文名称指定英文变量名，放入列表中，例如：
 
 ```markdown
 dims_en2cn <- list(year = "年份", ...)
 ```
-
-**antgreens** 默认使用 `r paste0(sapply(names(RawColnameTrans), \(x) {paste0(x, " = ", RawColnameTrans[[x]])}), collapse = '、')` 作为分析的维度以及其名称，其中中文名为原始数据中的列名，英文名为运行时使用的变量名。
 
 &emsp;&emsp;接着，确定原始数据与 MRL 数据中共同代表**具体产品**的列名
 
@@ -218,9 +219,11 @@ product_name <- "产品名称"
 drug_name <- "药物"
 ```
 
-## 生成各维度组合的样本量
+**antgreens** 默认使用 `r paste0(sapply(names(RawColnameTrans), \(x) {paste0("\x60", x, " = ", RawColnameTrans[[x]], "\x60")}), collapse = '、')`、`r paste0("\x60product = ", ProductLabelName, "\x60、\x60drug = ", DrugNames, "\x60")` 作为分析的维度以及其名称，其中中文名为原始数据中的列名，英文名为运行时使用的变量名。
 
-&emsp;&emsp;载入原始数据 `data`，确定需要分析的所有维度名（即列名），使用 `check_sample_size(data, dimensions, path)` 获取各维度组合下的样本量（最大、最小、中位数），并保存在文件中；然后手动根据实际情况确定各维度组合的样本量阈值，确定阈值时可以使用
+## 计算各维度组合的样本量数据
+
+&emsp;&emsp;载入原始数据 `data`，确定需要分析的所有维度名（即列名），使用 `check_sample_size(data, dimensions, drug_name, path)` 获取各维度组合下的样本量（最大、最小、中位数），并保存在文件中；然后手动根据实际情况确定各维度组合的样本量阈值。确定阈值时可以使用
 
 ```markdown
 get_sample_size_stats(data, draw_figure = TRUE, 年份, 药物)
@@ -228,7 +231,7 @@ get_sample_size_stats(data, draw_figure = TRUE, 年份, 药物)
 
 来输出这一维度组合下各种组合的样本量分布图，辅助确定样本量阈值。
 
-&emsp;&emsp;将确定好的阈值写入之前输出的文件，列名建议包含“阈值”一词（例如“样本量阈值”），也可以取其他名称，但是需要记录阈值所在列的列名关键词：
+&emsp;&emsp;将确定好的阈值写入之前输出的文件，列名建议包含“阈值”一词（例如“样本量阈值”），也可以取其他名称，但是需要记录阈值所在列的列名关键词，编译时作为参数传入：
 
 ```markdown
 threshold_key <- "阈值"

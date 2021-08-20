@@ -10,5 +10,5 @@ language:
     # solution: '解: '
     fig: '图 '
     tab: '表 '
-    ui:
-      chapter_name: ["第 ", " 章"]
+  ui:
+    chapter_name: ["第 ", " 章"]

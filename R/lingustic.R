@@ -67,7 +67,7 @@ ProvincePinyin <- c(
   "hebei", "henan", "heilongjiang", "hubei", "hunan", "jiling", "jiangsu", "jiangxi",
   "liaoning", "neimenggu", "ningxia", "qinghai", "shandong", "shan1xi", "shan3xi",
   "shanghai", "sichuan", "tianjin", "xizang", "xinjiang", "yunnan", "zhejiang",
-  "chognqing", "taiwan", "xianggang", "aomen"
+  "chongqing", "taiwan", "xianggang", "aomen"
 )
 
 #' I18N Settings for DataTable

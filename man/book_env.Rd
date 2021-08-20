@@ -4,18 +4,14 @@
 \alias{book_env}
 \title{Generate Environment for Book Rendering}
 \usage{
-book_env(data_path, skip_conv = FALSE, year_range = NA, year_colname = "年份")
+book_env(params = list(), year_colname = "年份", year_range = NA)
 }
 \arguments{
-\item{data_path}{character. Path of csv or excel raw data file}
-
-\item{skip_conv}{logical, default FALSE. If set TRUE then the \code{data_path}
-refers to the path of CSV raw data file, otherwise refers to the path of .xls(x)
-raw data file.}
-
-\item{year_range}{numeric vector length 2, default NA.}
+\item{params}{list. The parameters of report.}
 
 \item{year_colname}{character of column name for dimension \code{year}.}
+
+\item{year_range}{numeric vector length 2, default NA.}
 }
 \value{
 environment object contains necessary objects.

@@ -17,15 +17,64 @@ bar_line_ggplot(
   line_color = "black",
   point_color = "white",
   legend_pos = c("none", "left", "right", "bottom", "top"),
-  label_size = 12
+  label_size = 4
 )
 }
 \arguments{
-\item{label_size}{}
+\item{dataset}{data frame containing at least 3 columns.}
+
+\item{x_var}{character. The column name that will be the X axis in the plot.}
+
+\item{bar_var}{character, default \code{"sample_size"}. The column name that will be used to
+draw bar plot.}
+
+\item{scale_blank_div}{numeric, default 5. It directly affect the proportion of the figure
+height that line plot occupied. The line plot in the figure will occupies
+\eqn{\frac{scale_blank_div-2}{scale_blank_div}} of the figure height and leave blanks in the
+top and bottom \eqn{\frac{1}{scale_blank_div}}.}
+
+\item{scale_interval}{numeric vector of length 2. The interval of line plot in the main Y axis.}
+
+\item{main_axis_name}{character. The name of main Y axis. If missing, the function will use
+information in \code{option} to auto-detect the name according to \code{bar_var}.}
+
+\item{sec_axis_name}{character. The name of secondary Y axis. If missing, the function will use
+information in \code{option} to auto-detect the name according to \code{line_var}.}
+
+\item{x_axis_name}{character. The name of X axis. If missing, the function will use
+information in \code{option} to auto-detect the name according to \code{x_var}.}
+
+\item{bar_fill_palette}{character of character vector. It is the color palette of bar plot.}
+
+\item{line_color}{character of color. It is the color of line in line plot.}
+
+\item{point_color}{character of color. It is the color of point in line plot.}
+
+\item{legend_pos}{character of character vector. It controls the position of legend.}
+
+\item{label_size}{numeric, default 4. It controls the size of lebel of line plot. DO NOT make
+it less than 4 of larger than 6 or it will look ugly.}
 }
 \value{
-
+an object of class \code{ggplot}.
 }
 \description{
-Plot bar and line figure in the same figure
+This function use the given \code{x_var} and \code{bar_var} to draw bar plot but
+use the given \code{x_var} and the first column in \code{dataset} except \code{x_var} and
+\code{bar_var} to draw line plot. The principle of drawing bar and line plot in one figure is
+to map the graduation of line plot to the main Y axis and write the actual graduation of line
+plot to the secondary Y axis.
+
+You can control the top and bottom blank of line plot using
+parameters \code{scale_blank_div} and specify the range of line plot in the main Y axis using
+parameters \code{scale_interval}. These two parameters can easily control the scope of line plot
+to make it not conflict with bar plot.
+
+This function has the auto-detect function to change variable name in English to axis name in
+Chinese. The information in \code{option} you have set before run r plot code is used as a
+convertor.
+}
+\examples{
+df <- data.frame(year = as.factor(2016:2020), sample_size = 10:14, qualification_rate = 81:85)
+bar_line_ggplot(df, x_var = "year", bar_var = "sample_size")
 }

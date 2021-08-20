@@ -4,7 +4,8 @@
 #' @param dimensions character vector of dimensions to be analysis in \code{data}.
 #' @param path character of \code{.xls(x)} file path.
 #' @param drug_names dimension name for \code{drug}. The default value
-#' is in \code{\link{DrugNames}}.
+#' is in \code{\link{DrugNames}}. If \code{dimensions} contains \code{drug}, then should
+#' specify this parameters.
 #'
 #' @return a data frame of dimension combination which are encoded with 0/1 and
 #' maximum sample size (\code{max_ss}), median sample size (\code{med_ss}) and minimum
@@ -32,8 +33,7 @@ check_sample_size <- function(
       # dims <- setdiff(dims, get_option("DrugNames"))
       dims <- base::setdiff(dims, drug_names)
       tmp <- get_sample_size_stats(
-        data, draw_figure = FALSE,
-        !!!rlang::parse_exprs(dims)
+        data, draw_figure = FALSE, !!!rlang::parse_exprs(dims)
       )
       sample_size_stats[,"min_ss"][rowid] <- tmp$min_ss
       sample_size_stats[,"med_ss"][rowid] <- tmp$med_ss
