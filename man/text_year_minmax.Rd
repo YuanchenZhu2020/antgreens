@@ -2,7 +2,7 @@
 % Please edit documentation in R/text_utils.R
 \name{text_year_minmax}
 \alias{text_year_minmax}
-\title{Generate Text for Minimum and Maximum Rate Description by Year}
+\title{Generate Text Describing Minimum and Maximum Rate Item By Year}
 \usage{
 text_year_minmax(data, year_range, rate_text, item_name, rate_name)
 }
@@ -21,5 +21,5 @@ text_year_minmax(data, year_range, rate_text, item_name, rate_name)
 a character of sentence.
 }
 \description{
-Generate Text for Minimum and Maximum Rate Description by Year
+Generate text describing minimum and maximum rate item for each year.
 }

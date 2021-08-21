@@ -2,7 +2,7 @@
 % Please edit documentation in R/text_utils.R
 \name{text_max_3}
 \alias{text_max_3}
-\title{Generate Text Describing Three Largest Items}
+\title{Generate Text Describing Three Maximum Items}
 \usage{
 text_max_3(data, rate_text, item_name, rate_name)
 }
@@ -19,7 +19,7 @@ text_max_3(data, rate_text, item_name, rate_name)
 character of a sentence.
 }
 \description{
-Generate Text Describing Three Largest Items
+Generate Text Describing Three Maximum Items
 }
 \examples{
 df <- data.frame(rate = runif(4), item = c("a",'b','c','d'))
