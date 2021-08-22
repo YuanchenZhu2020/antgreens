@@ -4,13 +4,7 @@
 \alias{multi_dims_stats}
 \title{Get multi-dimensions stats}
 \usage{
-multi_dims_stats(
-  data,
-  ...,
-  drug_colname = "drug",
-  st_drug_name = "甲胺磷",
-  ed_drug_name = "二甲戊灵"
-)
+multi_dims_stats(data, ..., drug_colname = "drug", st_drug_name, ed_drug_name)
 }
 \arguments{
 \item{data}{a data frame with dimensions labels and drug monitoring data divided by MRL.}

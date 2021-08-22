@@ -9,7 +9,7 @@ factor_dims(
   ...,
   funcs = list(),
   quarter_readable = TRUE,
-  quarter_trans = quarter_readable
+  quarter_trans = antgreens::quarter_readable
 )
 }
 \arguments{

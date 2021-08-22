@@ -4,12 +4,12 @@
 \alias{use_template}
 \title{Copy Report Template to Directory}
 \usage{
-use_template(proj_dir, dir_name = "vegetables_residue_report")
+use_template(proj_dir, proj_name = "vegetables_residue_report")
 }
 \arguments{
 \item{proj_dir}{path of report directory.}
 
-\item{dir_name}{name of directory which will be the report project.}
+\item{proj_name}{name of directory which will be the report project.}
 }
 \value{
 None

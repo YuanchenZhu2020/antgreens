@@ -57,8 +57,13 @@
 multi_dims_stats <- function(
   data, ...,
   drug_colname = "drug",
-  st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
+  st_drug_name, ed_drug_name
 ) {
+  # It can be the default value of 'st_drug_name' and 'ed_drug_name', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(st_drug_name)) st_drug_name <- "\u7532\u80fa\u78f7"
+  if (missing(ed_drug_name)) ed_drug_name <- "\u4e8c\u7532\u620a\u7075"
+
   arguments <- dplyr::quos(...)
   args_names <- unlist(lapply(arguments, dplyr::quo_name))
   values_colname <- paste0(drug_colname, "_residual")
@@ -137,8 +142,13 @@ multi_dims_stats <- function(
 multi_dims_stats_dt <- function(
   data, ...,
   drug_colname = "drug",
-  st_drug_name = "\u7532\u80fa\u78f7", ed_drug_name = "\u4e8c\u7532\u620a\u7075"
+  st_drug_name, ed_drug_name
 ) {
+  # It can be the default value of 'st_drug_name' and 'ed_drug_name', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(st_drug_name)) st_drug_name <- "\u7532\u80fa\u78f7"
+  if (missing(ed_drug_name)) ed_drug_name <- "\u4e8c\u7532\u620a\u7075"
+
   arguments <- dplyr::quos(...)
   args_names <- unlist(lapply(arguments, dplyr::quo_name))
   values_colname <- paste0(drug_colname, "_residual")

@@ -144,8 +144,12 @@ text_max_3 <- function(data, rate_text, item_name, rate_name) {
 #' text_two_max_3(df, "\u6d4b\u8bd5\u7387", "item1", "item2", "rate", conjunction = "")
 #' @importFrom magrittr %>%
 text_two_max_3 <- function(
-  data, rate_text, item_name_1, item_name_2, rate_name, conjunction = "\u4e2d\u7684"
+  data, rate_text, item_name_1, item_name_2, rate_name, conjunction
 ) {
+  # It can be the default value of 'conjunction', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(conjunction)) conjunction <- "\u4e2d\u7684"
+
   data_desc <- data %>% dplyr::arrange(dplyr::desc(.data[[rate_name]]))
   str <- paste0(
     data_desc[1,][[item_name_1]], conjunction, data_desc[1,][[item_name_2]], "\u7684",
@@ -180,7 +184,7 @@ text_year_minmax <- function(data, year_range, rate_text, item_name, rate_name) 
       function(x){
         paste0(
           x, " \u5e74",
-          text_minmax(data %>% dplyr::filter(year == x), rate_text, item_name, rate_name)
+          text_minmax(data %>% dplyr::filter(.data[["year"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -205,7 +209,7 @@ text_quarter_minmax <- function(data, rate_text, item_name, rate_name) {
       function(x){
         paste0(
           x,
-          text_minmax(data %>% filter(quarter == x), rate_text, item_name, rate_name)
+          text_minmax(data %>% filter(.data[["quarter"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -233,7 +237,10 @@ text_timeline_minmax <- function(data, year_range, rate_text, item_name, rate_na
           function(y) {
             paste0(
               x, " \u5e74", y,
-              text_minmax(data %>% filter(year == x, quarter == y), rate_text, item_name, rate_name)
+              text_minmax(
+                data %>% filter(.data[["year"]] == x, .data[["quarter"]] == y),
+                rate_text, item_name, rate_name
+              )
             )
           }
         )
@@ -259,7 +266,7 @@ text_category_minmax <- function(data, rate_text, item_name, rate_name) {
       function(x){
         paste0(
           x, "\u5728",
-          text_minmax(data %>% filter(category == x), rate_text, item_name, rate_name)
+          text_minmax(data %>% filter(.data[["category"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -287,7 +294,10 @@ text_timeline_two_max <- function(
           function(y) {
             paste0(
               x, " \u5e74", y,
-              text_two_max(data %>% filter(year == x, quarter == y), rate_text, item_name_1, item_name_2, rate_name)
+              text_two_max(
+                data %>% filter(.data[["year"]] == x, .data[["quarter"]] == y),
+                rate_text, item_name_1, item_name_2, rate_name
+              )
             )
           }
         )
@@ -313,7 +323,7 @@ text_year_max_3 <- function(data, year_range, rate_text, item_name, rate_name) {
       function(x){
         paste0(
           x, " \u5e74",
-          text_max_3(data %>% filter(year == x), rate_text, item_name, rate_name)
+          text_max_3(data %>% filter(.data[["year"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -336,7 +346,7 @@ text_quarter_max_3 <- function(data, rate_text, item_name, rate_name) {
       function(x){
         paste0(
           x,
-          text_max_3(data %>% filter(quarter == x), rate_text, item_name, rate_name)
+          text_max_3(data %>% filter(.data[["quarter"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -362,7 +372,10 @@ text_timeline_max_3 <- function(data, year_range, rate_text, item_name, rate_nam
           function(y) {
             paste0(
               x, " \u5e74", y,
-              text_max_3(data %>% filter(year == x, quarter == y), rate_text, item_name, rate_name)
+              text_max_3(
+                data %>% filter(.data[["year"]] == x, .data[["quarter"]] == y),
+                rate_text, item_name, rate_name
+              )
             )
           }
         )
@@ -387,7 +400,7 @@ text_category_max_3 <- function(data, rate_text, item_name, rate_name) {
       function(x){
         paste0(
           x, "\u5728",
-          text_max_3(data %>% filter(category == x), rate_text, item_name, rate_name)
+          text_max_3(data %>% filter(.data[["category"]] == x), rate_text, item_name, rate_name)
         )
       }
     ),
@@ -406,15 +419,19 @@ text_category_max_3 <- function(data, rate_text, item_name, rate_name) {
 #' @return a character of sentence.
 #' @export
 text_year_two_max_3 <- function(
-  data, year_range, rate_text, item_name_1, item_name_2, rate_name, conjunction = "\u7684"
+  data, year_range, rate_text, item_name_1, item_name_2, rate_name, conjunction
 ) {
+  # It can be the default value of 'conjunction', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(conjunction)) conjunction <- "\u7684"
+
   str <- paste(
     sapply(
       year_range[1]:year_range[2],
       function(x){
         paste0(
           x, " \u5e74",
-          text_two_max_3(data %>% filter(year == x), rate_text, item_name_1, item_name_2, rate_name, conjunction)
+          text_two_max_3(data %>% filter(.data[["year"]] == x), rate_text, item_name_1, item_name_2, rate_name, conjunction)
         )
       }
     ),

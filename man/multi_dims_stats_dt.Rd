@@ -8,8 +8,8 @@ multi_dims_stats_dt(
   data,
   ...,
   drug_colname = "drug",
-  st_drug_name = "甲胺磷",
-  ed_drug_name = "二甲戊灵"
+  st_drug_name,
+  ed_drug_name
 )
 }
 \arguments{

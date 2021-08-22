@@ -136,7 +136,7 @@ ana_dims_en2cn <- modifyList(
 # province names translator
 provinces_trans_short <- list()
 for (i in 1:length(ProvinceShort)) {
-  provinces_trans_short[[ProvinceStandrad[i]]] <- ProvinceShort[i]
+  provinces_trans_short[[ProvinceStandard[i]]] <- ProvinceShort[i]
 }
 provinces_short_trans_pinyin <- list()
 for (i in 1:length(ProvinceShort)) {
@@ -181,11 +181,11 @@ treated_data <- calc_treated_data(
 ```
 
 ```{r generate_dims_combination_data, include=FALSE, cache=!params$product_env}
-dims_comb_data <- gen_dims_comb_stats(data, ana_dims, fast = TRUE)
+dims_comb_data <- gen_dims_comb_stats(treated_data, ana_dims, fast = TRUE)
 ```
 
 ```{r load_other_codes, include=FALSE}
-code_files <- dir(params$codes_dir, pattern = "*.R")
+code_files <- dir(params$codes_dir, pattern = "*.R", full.names = TRUE, recursive = TRUE)
 for (cf in code_files) {
   source(cf, encoding = "UTF-8")
 }

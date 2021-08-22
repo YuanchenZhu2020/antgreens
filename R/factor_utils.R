@@ -12,7 +12,7 @@
 #' @examples
 #' df <- data.frame(quarter = c(1,2,3,4))
 #' df <- make_quarter_readable(df)
-make_quarter_readable <- function(df, quarter_trans = quarter_readable) {
+make_quarter_readable <- function(df, quarter_trans = antgreens::quarter_readable) {
   df[["quarter"]][df[["quarter"]] == 1] <- quarter_trans$`1`
   df[["quarter"]][df[["quarter"]] == 2] <- quarter_trans$`2`
   df[["quarter"]][df[["quarter"]] == 3] <- quarter_trans$`3`
@@ -40,7 +40,7 @@ make_quarter_readable <- function(df, quarter_trans = quarter_readable) {
 #' data <- data.frame(year = 2016:2019, quarter = c(1,2,3,4))
 #' factor_dims(data, year, quarter, quarter_trans = list(`1`='a',`2`='b',`3`='c',`4`='d'))
 factor_dims <- function(
-  dataset, ..., funcs = list(), quarter_readable = TRUE, quarter_trans = quarter_readable
+  dataset, ..., funcs = list(), quarter_readable = TRUE, quarter_trans = antgreens::quarter_readable
 ) {
   dims <- dplyr::quos(...)
   dim_names <-  unlist(lapply(dims, dplyr::quo_name))
@@ -112,7 +112,9 @@ factor_year <- function(dataset) {
 }
 #' @rdname factor_year
 #' @export
-factor_quarter <- function(dataset, readable = FALSE, quarter_trans = quarter_readable) {
+factor_quarter <- function(
+  dataset, readable = FALSE, quarter_trans = antgreens::quarter_readable
+) {
   if (readable) {
     quarter_levels <- sapply(1:4, \(x) {quarter_trans[[x]]})
     dataset <- dataset %>%

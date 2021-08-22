@@ -349,7 +349,7 @@ heatmap_echart <- function(
 #'
 #' @description Plot map using \code{\link[echarts4r]{e_map}}. It will auto-detect the \code{value_var}
 #' name using information in \code{option} when the \code{value_axis_name} is not given. The chart's
-#' width is set "100%" and the height is set "800%" to make the map larger enougth to see. For visual
+#' width is set "100\%" and the height is set "800\%" to make the map larger enougth to see. For visual
 #' map, the type is "continuous" and the upper bound is calculated automatically. The position of
 #' visual map is set to right and vertically centered.
 #'
@@ -414,8 +414,8 @@ map_echart <- function(
   else e <- data
 
   e <- e |>
-    echarts4r::e_charts(
-      province, timeline = !is.null(timeline_var),
+    echarts4r::e_charts_(
+      "province", timeline = !is.null(timeline_var),
       width = '100%', height = '800%'
     ) |>
     echarts4r::e_map_register("CustomMap", map_json) |>
@@ -717,7 +717,7 @@ scatter_timeline_echart <- function(
 
   # find the lower bound of secondary Y axis.
   y_bounds <- get_bounds(data, y_var)
-  y_lower_bound <- ifelse(!missing(y_lower_bound), y_lower_bound, y_boundsp[1])
+  y_lower_bound <- ifelse(!missing(y_lower_bound), y_lower_bound, y_bounds[1])
   y_upper_bound <- ifelse(!missing(y_upper_bound), y_upper_bound, y_bounds[2])
 
   # formatter str

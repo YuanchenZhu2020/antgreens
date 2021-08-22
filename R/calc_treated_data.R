@@ -1,18 +1,19 @@
 #' Calculate treated data using raw data and MRL
 #'
 #' @description `calc_treated_data()` construct a new data frame which construction
-#' is like raw_data that has multiple columns as labels and the remaning columns are
+#' is like raw_data that has multiple columns as labels and the renaming columns are
 #' detection values of each drug on each sample.
 #'
 #' @param raw_data a data frame. It is raw detection data of each sample on each drug.
-#' It has multiple columns as labels of each sample and the remaining columns are
-#' raw detection values.
-#' @param mrl_data a data frame. It has one column named `产品名称` and the other columns
-#' named with name of drugs. Every row is MRL value of one product on each drugs.
+#'   It has multiple columns as labels of each sample and the remaining columns are
+#'   raw detection values.
+#' @param mrl_data a data frame. It has one column named "\\u4ea7\\u54c1\\u540d\\u79f0"
+#'   and the other columns named with name of drugs. Every row is MRL value of one
+#'   product on each drugs.
 #' @param st_drug a character. Name of the first column of drug.
 #' @param ed_drug a character. Name of the last column of drug.
 #' @param raw_col_en2cn list, default \code{\link{RawColnameTrans}}. It is the
-#' English to Chinese names of dimensions except product.
+#'   English to Chinese names of dimensions except product.
 #' @param product_name character. It is the product dimension name.
 #'
 #' @return

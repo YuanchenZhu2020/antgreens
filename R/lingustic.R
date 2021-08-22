@@ -111,10 +111,11 @@ ColnamesI18n <- list(
     qualification_rate = "\u5408\u683c\u7387",
     detection_rate_percent = "\u68c0\u51fa\u7387\uff08\u0025\uff09",
     qualification_rate_percent = "\u5408\u683c\u7387\uff08\u0025\uff09",
+    defective_rate_percent = "\u8d85\u6807\u7387\uff08\u0025\uff09",
     multi_detection_rate = "\u591a\u6b8b\u7559\u68c0\u51fa\u7387",
     multi_defective_rate = "\u591a\u6b8b\u7559\u8d85\u6807\u7387",
-    multi_detection_rate_percenet = "\u591a\u6b8b\u7559\u68c0\u51fa\u7387\uff08\u0025\uff09",
-    multi_defective_rate_percenet = "\u591a\u6b8b\u7559\u8d85\u6807\u7387\uff08\u0025\uff09",
+    multi_detection_rate_percent = "\u591a\u6b8b\u7559\u68c0\u51fa\u7387\uff08\u0025\uff09",
+    multi_defective_rate_percent = "\u591a\u6b8b\u7559\u8d85\u6807\u7387\uff08\u0025\uff09",
     max_detection_num = "\u6700\u5927\u591a\u6b8b\u7559\u68c0\u51fa\u6570",
     max_defective_num = "\u6700\u5927\u591a\u6b8b\u7559\u8d85\u6807\u6570"
   )

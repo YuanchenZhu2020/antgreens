@@ -4,7 +4,7 @@
 \alias{get_year_range}
 \title{Get the year span of the analysis}
 \usage{
-get_year_range(csv_data_file, year_colname = "年份")
+get_year_range(csv_data_file, year_colname)
 }
 \arguments{
 \item{csv_data_file}{a character representing the UTF-8 `.csv` data file.}

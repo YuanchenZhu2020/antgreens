@@ -4,7 +4,7 @@
 \alias{make_quarter_readable}
 \title{Make Quarter Readable in Table}
 \usage{
-make_quarter_readable(df, quarter_trans = quarter_readable)
+make_quarter_readable(df, quarter_trans = antgreens::quarter_readable)
 }
 \arguments{
 \item{df}{data frame contains column named with "quarter"}

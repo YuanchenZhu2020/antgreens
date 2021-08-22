@@ -4,7 +4,7 @@
 \alias{book_env}
 \title{Generate Environment for Book Rendering}
 \usage{
-book_env(params = list(), year_colname = "年份", year_range = NA)
+book_env(params = list(), year_colname, year_range = NA)
 }
 \arguments{
 \item{params}{list. The parameters of report.}

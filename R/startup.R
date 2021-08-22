@@ -29,23 +29,36 @@ TemplateHelp <- paste0(
 #' Copy Report Template to Directory
 #'
 #' @param proj_dir path of report directory.
-#' @param dir_name name of directory which will be the report project.
+#' @param proj_name name of directory which will be the report project.
 #'
 #' @return None
 #' @export
-use_template <- function(proj_dir, dir_name = "vegetables_residue_report") {
+use_template <- function(proj_dir, proj_name = "vegetables_residue_report") {
   if (!dir.exists(proj_dir)) {
     dir.create(proj_dir)
   }
-  dir_path <- normalize_path(file.path(proj_dir, dir_name))
-  if (!dir.exists(dir_path)) {
-    dir.create(dir_path)
+  proj_path <- normalize_path(file.path(proj_dir, proj_name))
+  if (!dir.exists(proj_path)) {
+    dir.create(proj_path)
   } else {
-    stop(sprintf("Directory %s already exists.", dir_path))
+    stop(sprintf("Directory %s already exists.", proj_path))
   }
 
   template_dir <- system.file("extdata", "report_template", package = "antgreens")
-  file.copy(template_dir, proj_dir, recursive = TRUE)
-  file.rename(file.path(proj_dir, "report_template"), dir_path)
-  setwd(dir_path)
+  dirs_files <- dir(template_dir, include.dirs = TRUE, recursive = TRUE)
+  void <- sapply(
+    dirs_files,
+    \(x) {
+      if (utils::file_test('-d', file.path(template_dir, x))) {
+        dir.create(file.path(proj_path, x))
+      }
+      else {
+        file.copy(file.path(template_dir, x), file.path(proj_path, x))
+      }
+    }
+  )
+  # file.copy(template_dir, proj_dir, recursive = TRUE, copy.mode = FALSE)
+  # tmp_path <- normalize_path(file.path(proj_dir, "report_template"))
+  # file.rename(tmp_path, proj_path)
+  setwd(proj_path)
 }

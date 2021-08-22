@@ -12,7 +12,11 @@
 \usage{
 factor_year(dataset)
 
-factor_quarter(dataset, readable = FALSE, quarter_trans = quarter_readable)
+factor_quarter(
+  dataset,
+  readable = FALSE,
+  quarter_trans = antgreens::quarter_readable
+)
 
 factor_province(dataset)
 

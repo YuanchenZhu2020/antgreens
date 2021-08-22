@@ -95,13 +95,13 @@ get_bounds <- function(data, column_name, increment = 5, upper_shrink = FALSE, s
 #' @importFrom magrittr %>%
 combine_year_quarter <- function(
   data, year_name = "year", quarter_name = "quarter",
-  simple = TRUE, quarter_trans = quarter_readable
+  simple = TRUE, quarter_trans = antgreens::quarter_readable
 ){
   data <- data %>%
     dplyr::rename("quarter" = .data[[quarter_name]])
   if (simple) {
     data <- data %>%
-      dplyr::mutate(timeline = paste0(.data[[year_name]], "-Q", "quarter"))
+      dplyr::mutate(timeline = paste0(.data[[year_name]], "-Q", .data[["quarter"]]))
   }
   else {
     data <- data %>%
@@ -171,7 +171,7 @@ int_to_numeric <- function(data, column_name) {
 #' @return a data frame which province column contains short names of province
 #' @export
 shorten_province_name <- function(data) {
-  provinces_trans <- getOption("report.options")[["provinceTrans"]]
+  provinces_trans <- getOption("report.options")[["provinceTransShort"]]
   data[["province"]] <- sapply(as.character(data[["province"]]), \(x) {provinces_trans[[x]]})
   return(data)
 }

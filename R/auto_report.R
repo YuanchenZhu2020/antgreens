@@ -5,7 +5,11 @@
 #'
 #' @return a numeric vector of length 2, representing min and max year separately.
 #' @export
-get_year_range <- function(csv_data_file, year_colname = "\u5e74\u4efd") {
+get_year_range <- function(csv_data_file, year_colname) {
+  # It can be the default value of 'year_colname', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(year_colname)) year_colname <- "\u5e74\u4efd"
+
   data <- data.table::fread(csv_data_file, encoding = "UTF-8")
   year_range <- c(
     min(data[, year_colname, with = FALSE]),
@@ -22,7 +26,11 @@ get_year_range <- function(csv_data_file, year_colname = "\u5e74\u4efd") {
 #'
 #' @return environment object contains necessary objects.
 #' @export
-book_env <- function(params = list(), year_colname = "\u5e74\u4efd", year_range = NA) {
+book_env <- function(params = list(), year_colname, year_range = NA) {
+  # It can be the default value of 'year_colname', but the PDF manual
+  # cannot be generated if do so.
+  if (missing(year_colname)) year_colname <- "\u5e74\u4efd"
+
   # if raw data file specified in params is CSV, then `data_path` represent the path
   # of the `.csv` file. Otherwise do converting.
   tmp_fn <- unlist(strsplit(basename(params[["raw_data"]]), '.', fixed = TRUE))
@@ -50,7 +58,8 @@ book_env <- function(params = list(), year_colname = "\u5e74\u4efd", year_range 
 #' @param new_params_list list. The given parameters.
 #'
 #' @return list.
-update_params <- function(new_params_list) {
+#' @export 
+update_params <- function(new_params_list = list()) {
   default_params <- list(
     cran_mirror = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
     raw_data = "../Data/raw_data/vegetable_58_2016-2020.xlsx",

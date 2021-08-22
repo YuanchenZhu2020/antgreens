@@ -43,7 +43,7 @@ an object of class \code{echarts4r}.
 \description{
 Plot map using \code{\link[echarts4r]{e_map}}. It will auto-detect the \code{value_var}
 name using information in \code{option} when the \code{value_axis_name} is not given. The chart's
-width is set "100%" and the height is set "800%" to make the map larger enougth to see. For visual
+width is set "100\%" and the height is set "800\%" to make the map larger enougth to see. For visual
 map, the type is "continuous" and the upper bound is calculated automatically. The position of
 visual map is set to right and vertically centered.
 }

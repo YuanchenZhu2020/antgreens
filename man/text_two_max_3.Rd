@@ -10,7 +10,7 @@ text_two_max_3(
   item_name_1,
   item_name_2,
   rate_name,
-  conjunction = "中的"
+  conjunction
 )
 }
 \arguments{
